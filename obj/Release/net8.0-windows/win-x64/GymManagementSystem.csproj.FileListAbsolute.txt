@@ -594,3 +594,4 @@ C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-wi
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\ref\GymManagementSystem.dll
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\bin\Release\net8.0-windows\win-x64\Npgsql.dll
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\bin\Release\net8.0-windows\win-x64\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GymManagementSystem.sourcelink.json

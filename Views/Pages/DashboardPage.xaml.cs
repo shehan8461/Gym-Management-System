@@ -11,6 +11,10 @@ namespace GymManagementSystem.Views.Pages
         public DashboardPage()
         {
             InitializeComponent();
+            
+            // Set current date
+            txtCurrentDate.Text = DateTime.Now.ToString("MMMM dd, yyyy");
+            
             LoadDashboardData();
         }
 

@@ -6,7 +6,37 @@
         Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="#f0f2f5">
+    
+    <Window.Resources>
+        <!-- Menu Button Style -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Height" Value="56"/>
+            <Setter Property="Margin" Value="8,4"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="#5f6368"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="12"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8f5e9"/>
+                    <Setter Property="Foreground" Value="#00BFA5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!-- Active Menu Button Style -->
+        <Style x:Key="ActiveMenuButtonStyle" TargetType="Button" BasedOn="{StaticResource MenuButtonStyle}">
+            <Setter Property="Background" Value="#e0f2f1"/>
+            <Setter Property="Foreground" Value="#00BFA5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,7 +44,17 @@
         </Grid.RowDefinitions>
 
         <!-- Top Navigation Bar -->
-        <Border Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}" Height="70">
+        <Border Grid.Row="0" Height="72">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#00897B" Offset="0"/>
+                    <GradientStop Color="#00BFA5" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Border.Effect>
+                <DropShadowEffect Color="#000" BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+            </Border.Effect>
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -23,27 +63,53 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Logo and Title -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20,0">
-                    <materialDesign:PackIcon Kind="Dumbbell" Width="40" Height="40" 
-                                             Foreground="White" VerticalAlignment="Center"/>
-                    <StackPanel Margin="15,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="GYM MANAGEMENT SYSTEM" 
-                                   FontSize="18" FontWeight="Bold" Foreground="White"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="24,0">
+                    <Border Background="White" CornerRadius="10" Padding="8" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="Dumbbell" Width="32" Height="32" 
+                                                 Foreground="#00BFA5"/>
+                    </Border>
+                    <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="GYM MANAGEMENT" 
+                                   FontSize="20" FontWeight="Bold" Foreground="White"/>
                         <TextBlock x:Name="txtWelcome" Text="Welcome, Admin" 
-                                   FontSize="12" Foreground="White" Opacity="0.9"/>
+                                   FontSize="13" Foreground="White" Opacity="0.95"/>
                     </StackPanel>
                 </StackPanel>
 
+                <!-- Center - Current Time -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Clock" Width="20" Height="20" 
+                                             Foreground="White" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="txtCurrentTime" Text="12:00 PM" 
+                               FontSize="14" Foreground="White" Opacity="0.9" VerticalAlignment="Center"/>
+                </StackPanel>
+
                 <!-- User Info and Logout -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="20,0">
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="24,0" VerticalAlignment="Center">
+                    <Border Background="#ffffff20" CornerRadius="20" Padding="16,8" Margin="0,0,12,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Account" Width="24" Height="24" 
+                                                     Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock x:Name="txtUsername" Text="Administrator" 
+                                       FontSize="14" Foreground="White" FontWeight="Medium" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    
                     <Button x:Name="btnLogout" 
-                            Content="LOGOUT" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            Foreground="White"
-                            BorderBrush="White"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="White"
+                            Foreground="#00BFA5"
+                            BorderThickness="0"
                             Click="btnLogout_Click"
-                            Height="35"
-                            Margin="10,0"/>
+                            Height="40"
+                            Padding="20,0"
+                            FontWeight="SemiBold"
+                            materialDesign:ButtonAssist.CornerRadius="20">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Logout" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="LOGOUT" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
@@ -51,136 +117,125 @@
         <!-- Main Content Area -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Side Menu -->
-            <Border Grid.Column="0" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
-                <StackPanel Margin="0,20,0,0">
-                    <Button x:Name="btnDashboard" 
-                            Content="Dashboard" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnDashboard_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Dashboard" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+            <Border Grid.Column="0" Background="White" BorderBrush="#e0e0e0" BorderThickness="0,0,1,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="4" ShadowDepth="0" Opacity="0.08"/>
+                </Border.Effect>
+                
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="12,24,12,24">
+                        <!-- Dashboard -->
+                        <Button x:Name="btnDashboard" 
+                                Style="{StaticResource ActiveMenuButtonStyle}"
+                                Click="btnDashboard_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#00BFA5" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btnMembers" 
-                            Content="Members" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnMembers_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Members" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                        <!-- Members -->
+                        <Button x:Name="btnMembers" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnMembers_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#2196F3" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Members" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btnPayments" 
-                            Content="Payments" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnPayments_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="CurrencyUsd" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Payments" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                        <!-- Payments -->
+                        <Button x:Name="btnPayments" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnPayments_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#4CAF50" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="CurrencyUsd" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Payments" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btnAttendance" 
-                            Content="Attendance" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnAttendance_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ClipboardCheck" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Attendance" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                        <!-- Attendance -->
+                        <Button x:Name="btnAttendance" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnAttendance_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#FF9800" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="ClipboardCheck" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Attendance" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btnPackages" 
-                            Content="Packages" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnPackages_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Package" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Packages" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                        <!-- Separator -->
+                        <Separator Margin="8,16" Background="#e0e0e0"/>
 
-                    <Button x:Name="btnBiometric" 
-                            Content="Biometric Devices" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnBiometric_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Fingerprint" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Biometric" Margin="15,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
+                        <!-- Packages -->
+                        <Button x:Name="btnPackages" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnPackages_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#9C27B0" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="Package" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Packages" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btnUsers" 
-                            Content="Users" 
-                            Style="{StaticResource MaterialDesignFlatButton}"
-                            HorizontalAlignment="Stretch"
-                            Height="50"
-                            FontSize="14"
-                            Click="btnUsers_Click">
-                        <Button.ContentTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="AccountCog" Width="24" Height="24" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Users" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                        <!-- Biometric Devices -->
+                        <Button x:Name="btnBiometric" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnBiometric_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#E91E63" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="Fingerprint" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Biometric" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Users -->
+                        <Button x:Name="btnUsers" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnUsers_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#607D8B" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="AccountCog" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Users" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <!-- Bottom Info Card -->
+                        <Border Background="#f5f5f5" CornerRadius="12" Padding="16" Margin="8,32,8,8">
+                            <StackPanel>
+                                <TextBlock Text="System Info" FontSize="13" FontWeight="SemiBold" Foreground="#5f6368" Margin="0,0,0,8"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <materialDesign:PackIcon Kind="DatabaseOutline" Width="16" Height="16" Foreground="#00BFA5" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="PostgreSQL" FontSize="12" Foreground="#757575" VerticalAlignment="Center"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </Button.ContentTemplate>
-                    </Button>
-                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CheckCircle" Width="16" Height="16" Foreground="#4CAF50" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="System Online" FontSize="12" Foreground="#757575" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
             </Border>
 
             <!-- Content Frame -->
-            <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
+            <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="#f0f2f5"/>
         </Grid>
     </Grid>
 </Window>

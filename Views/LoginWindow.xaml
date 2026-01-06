@@ -3,68 +3,318 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Gym Management System - Login" 
-        Height="500" Width="400"
+        Height="650" Width="1000"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="{DynamicResource MaterialDesignPaper}">
+        Background="#1a1a1a">
+    
+    <Window.Resources>
+        <!-- Custom styles -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#00BFA5"/>
+            <Setter Property="BorderBrush" Value="#424242"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+        <Style x:Key="ModernPasswordBox" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignOutlinedPasswordBox}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="#00BFA5"/>
+            <Setter Property="BorderBrush" Value="#424242"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}" Padding="20">
-            <StackPanel HorizontalAlignment="Center">
-                <materialDesign:PackIcon Kind="Dumbbell" Width="60" Height="60" 
-                                         Foreground="White" HorizontalAlignment="Center"/>
-                <TextBlock Text="GYM MANAGEMENT" FontSize="24" FontWeight="Bold" 
-                           Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <TextBlock Text="SYSTEM" FontSize="18" 
-                           Foreground="White" HorizontalAlignment="Center"/>
+        <!-- Left Side - Branding/Hero Section -->
+        <Grid Grid.Column="0">
+            <!-- Background gradient overlay -->
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#1a1a1a" Offset="0"/>
+                    <GradientStop Color="#2d2d2d" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            
+            <!-- Animated circles decoration -->
+            <Canvas>
+                <Ellipse Width="300" Height="300" Canvas.Left="-100" Canvas.Top="-100" Opacity="0.05">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#00BFA5" Offset="0"/>
+                            <GradientStop Color="Transparent" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse Width="400" Height="400" Canvas.Right="-150" Canvas.Bottom="-150" Opacity="0.05">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#FF6B6B" Offset="0"/>
+                            <GradientStop Color="Transparent" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Canvas>
+            
+            <StackPanel VerticalAlignment="Center" Margin="60,0">
+                <!-- Logo Icon -->
+                <materialDesign:PackIcon Kind="Dumbbell" 
+                                         Width="120" Height="120" 
+                                         Foreground="#00BFA5" 
+                                         HorizontalAlignment="Center">
+                    <materialDesign:PackIcon.Effect>
+                        <DropShadowEffect Color="#00BFA5" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+                    </materialDesign:PackIcon.Effect>
+                </materialDesign:PackIcon>
+                
+                <!-- App Title -->
+                <TextBlock Text="GYM MANAGEMENT" 
+                           FontSize="42" 
+                           FontWeight="Bold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,30,0,0">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.8"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                
+                <TextBlock Text="SYSTEM" 
+                           FontSize="32" 
+                           FontWeight="SemiBold" 
+                           Foreground="#00BFA5" 
+                           HorizontalAlignment="Center"
+                           Margin="0,5,0,0"/>
+                
+                <!-- Tagline -->
+                <Border Background="#252525" 
+                        CornerRadius="20" 
+                        Padding="30,20" 
+                        Margin="0,50,0,0"
+                        BorderBrush="#00BFA5"
+                        BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#00BFA5" BlurRadius="20" ShadowDepth="0" Opacity="0.3"/>
+                    </Border.Effect>
+                    
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <materialDesign:PackIcon Kind="CheckCircle" 
+                                                     Width="24" Height="24" 
+                                                     Foreground="#00BFA5" 
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Member Management" 
+                                       FontSize="16" 
+                                       Foreground="#E0E0E0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <materialDesign:PackIcon Kind="CheckCircle" 
+                                                     Width="24" Height="24" 
+                                                     Foreground="#00BFA5" 
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Attendance Tracking" 
+                                       FontSize="16" 
+                                       Foreground="#E0E0E0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                            <materialDesign:PackIcon Kind="CheckCircle" 
+                                                     Width="24" Height="24" 
+                                                     Foreground="#00BFA5" 
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Payment Processing" 
+                                       FontSize="16" 
+                                       Foreground="#E0E0E0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="CheckCircle" 
+                                                     Width="24" Height="24" 
+                                                     Foreground="#00BFA5" 
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock Text="Biometric Integration" 
+                                       FontSize="16" 
+                                       Foreground="#E0E0E0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Footer text -->
+                <TextBlock Text="Transform your gym operations with cutting-edge technology" 
+                           FontSize="14" 
+                           Foreground="#808080" 
+                           HorizontalAlignment="Center" 
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="0,40,0,0"
+                           MaxWidth="400"/>
             </StackPanel>
-        </Border>
+        </Grid>
 
-        <!-- Login Form -->
-        <StackPanel Grid.Row="1" Margin="40" VerticalAlignment="Center">
-            <TextBlock Text="Sign In" FontSize="22" FontWeight="Bold" 
-                       HorizontalAlignment="Center" Margin="0,0,0,30"/>
+        <!-- Right Side - Login Form -->
+        <Grid Grid.Column="1" Background="#252525">
+            <materialDesign:Card Margin="40" 
+                                 Padding="40"
+                                 VerticalAlignment="Center"
+                                 UniformCornerRadius="15"
+                                 Background="#2d2d2d">
+                <materialDesign:Card.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
+                </materialDesign:Card.Effect>
+                
+                <StackPanel>
+                    <!-- Welcome Text -->
+                    <TextBlock Text="Welcome Back!" 
+                               FontSize="28" 
+                               FontWeight="Bold" 
+                               Foreground="White"
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Sign in to continue" 
+                               FontSize="14" 
+                               Foreground="#B0B0B0"
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,40"/>
 
-            <TextBox x:Name="txtUsername" 
-                     materialDesign:HintAssist.Hint="Username"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     Margin="0,0,0,20"
-                     FontSize="14"/>
+                    <!-- Username Field -->
+                    <Border Background="#1a1a1a" 
+                            CornerRadius="10" 
+                            Padding="4"
+                            Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="USERNAME" 
+                                       FontSize="11" 
+                                       Foreground="#808080"
+                                       Margin="12,8,0,0"
+                                       FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtUsername" 
+                                     materialDesign:HintAssist.Hint="Enter your username"
+                                     Style="{StaticResource ModernTextBox}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Margin="0,0,0,8"/>
+                        </StackPanel>
+                    </Border>
 
-            <PasswordBox x:Name="txtPassword" 
-                         materialDesign:HintAssist.Hint="Password"
-                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-                         Margin="0,0,0,10"
-                         FontSize="14"/>
+                    <!-- Password Field -->
+                    <Border Background="#1a1a1a" 
+                            CornerRadius="10" 
+                            Padding="4"
+                            Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="PASSWORD" 
+                                       FontSize="11" 
+                                       Foreground="#808080"
+                                       Margin="12,8,0,0"
+                                       FontWeight="SemiBold"/>
+                            <PasswordBox x:Name="txtPassword" 
+                                         materialDesign:HintAssist.Hint="Enter your password"
+                                         Style="{StaticResource ModernPasswordBox}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Margin="0,0,0,8"/>
+                        </StackPanel>
+                    </Border>
 
-            <TextBlock x:Name="txtError" 
-                       Text="" 
-                       Foreground="Red" 
-                       FontSize="12" 
-                       Margin="0,0,0,20"
-                       TextWrapping="Wrap"
-                       Visibility="Collapsed"/>
+                    <!-- Error Message -->
+                    <Border x:Name="errorBorder"
+                            Background="#FF6B6B" 
+                            CornerRadius="8" 
+                            Padding="12,10"
+                            Margin="0,0,0,20"
+                            Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AlertCircle" 
+                                                     Width="20" Height="20" 
+                                                     Foreground="White" 
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,10,0"/>
+                            <TextBlock x:Name="txtError" 
+                                       Text="" 
+                                       Foreground="White" 
+                                       FontSize="13" 
+                                       TextWrapping="Wrap"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-            <Button x:Name="btnLogin" 
-                    Content="LOGIN" 
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Height="45"
-                    FontSize="14"
-                    FontWeight="Bold"
-                    Click="btnLogin_Click"/>
+                    <!-- Login Button -->
+                    <Button x:Name="btnLogin" 
+                            Content="SIGN IN" 
+                            Height="50"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Background="#00BFA5"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Click="btnLogin_Click"
+                            Margin="0,0,0,25">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                                <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="10"/>
+                                <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp4"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#00D4B8"/>
+                                        <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp8"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Effect>
+                            <DropShadowEffect Color="#00BFA5" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
+                        </Button.Effect>
+                    </Button>
 
-            <TextBlock Text="Default credentials: admin / admin123" 
-                       FontSize="11" 
-                       Foreground="Gray" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,20,0,0"
-                       TextWrapping="Wrap"
-                       TextAlignment="Center"/>
-        </StackPanel>
+                    <!-- Default Credentials Info -->
+                    <Border Background="#1a1a1a" 
+                            CornerRadius="8" 
+                            Padding="15,12"
+                            BorderBrush="#424242"
+                            BorderThickness="1">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
+                                <materialDesign:PackIcon Kind="InformationOutline" 
+                                                         Width="18" Height="18" 
+                                                         Foreground="#00BFA5" 
+                                                         VerticalAlignment="Center"
+                                                         Margin="0,0,8,0"/>
+                                <TextBlock Text="Default Credentials" 
+                                           FontSize="12" 
+                                           Foreground="#B0B0B0"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock HorizontalAlignment="Center">
+                                <Run Text="Username: " Foreground="#808080" FontSize="11"/>
+                                <Run Text="admin" Foreground="#00BFA5" FontWeight="Bold" FontSize="11"/>
+                            </TextBlock>
+                            <TextBlock HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <Run Text="Password: " Foreground="#808080" FontSize="11"/>
+                                <Run Text="admin123" Foreground="#00BFA5" FontWeight="Bold" FontSize="11"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
     </Grid>
 </Window>

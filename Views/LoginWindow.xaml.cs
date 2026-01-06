@@ -47,6 +47,7 @@ namespace GymManagementSystem.Views
         {
             txtError.Text = message;
             txtError.Visibility = Visibility.Visible;
+            errorBorder.Visibility = Visibility.Visible;
         }
     }
 }

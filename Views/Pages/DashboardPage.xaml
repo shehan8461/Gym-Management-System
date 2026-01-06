@@ -2,13 +2,54 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      Title="Dashboard">
+      Title="Dashboard"
+      Background="#f0f2f5">
+    
+    <Page.Resources>
+        <!-- Stats Card Style -->
+        <Style x:Key="StatsCardStyle" TargetType="materialDesign:Card">
+            <Setter Property="UniformCornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="30">
-            <TextBlock Text="Dashboard" FontSize="28" FontWeight="Bold" Margin="0,0,0,20"/>
+        <StackPanel Margin="32,24">
+            <!-- Page Header -->
+            <Grid Margin="0,0,0,32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Dashboard Overview" FontSize="32" FontWeight="Bold" Foreground="#202124"/>
+                    <TextBlock Text="Welcome back! Here's what's happening today" 
+                               FontSize="15" Foreground="#5f6368" Margin="0,4,0,0"/>
+                </StackPanel>
+                
+                <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="16,12" 
+                        BorderBrush="#e0e0e0" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CalendarToday" Width="24" Height="24" 
+                                                 Foreground="#00BFA5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <StackPanel>
+                            <TextBlock x:Name="txtCurrentDate" Text="January 6, 2026" 
+                                       FontSize="14" FontWeight="SemiBold" Foreground="#202124"/>
+                            <TextBlock Text="Today" FontSize="12" Foreground="#5f6368"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
             <!-- Statistics Cards -->
-            <Grid Margin="0,0,0,30">
+            <Grid Margin="0,0,0,32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -17,98 +58,365 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Total Members Card -->
-                <materialDesign:Card Grid.Column="0" Margin="0,0,10,0" Background="#2196F3">
-                    <StackPanel Margin="20">
-                        <materialDesign:PackIcon Kind="AccountGroup" Width="40" Height="40" 
-                                                 Foreground="White" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="txtTotalMembers" Text="0" 
-                                   FontSize="32" FontWeight="Bold" 
-                                   Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <TextBlock Text="Total Members" 
-                                   FontSize="14" Foreground="White" 
-                                   HorizontalAlignment="Center" Opacity="0.9"/>
-                    </StackPanel>
+                <materialDesign:Card Grid.Column="0" Margin="0,0,16,0" Style="{StaticResource StatsCardStyle}">
+                    <materialDesign:Card.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#2196F3" Offset="0"/>
+                            <GradientStop Color="#1976D2" Offset="1"/>
+                        </LinearGradientBrush>
+                    </materialDesign:Card.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                                Width="56" Height="56" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="AccountGroup" Width="32" Height="32" 
+                                                     Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                            <TextBlock x:Name="txtTotalMembers" Text="0" 
+                                       FontSize="40" FontWeight="Bold" 
+                                       Foreground="White"/>
+                            <TextBlock Text="Total Members" 
+                                       FontSize="15" Foreground="White" 
+                                       Opacity="0.9" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
+                            <materialDesign:PackIcon Kind="TrendingUp" Width="16" Height="16" 
+                                                     Foreground="White" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="+12% from last month" FontSize="12" Foreground="White" Opacity="0.9" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
 
                 <!-- Today's Attendance Card -->
-                <materialDesign:Card Grid.Column="1" Margin="10,0,10,0" Background="#4CAF50">
-                    <StackPanel Margin="20">
-                        <materialDesign:PackIcon Kind="ClipboardCheck" Width="40" Height="40" 
-                                                 Foreground="White" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="txtTodayAttendance" Text="0" 
-                                   FontSize="32" FontWeight="Bold" 
-                                   Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <TextBlock Text="Today's Attendance" 
-                                   FontSize="14" Foreground="White" 
-                                   HorizontalAlignment="Center" Opacity="0.9"/>
-                    </StackPanel>
+                <materialDesign:Card Grid.Column="1" Margin="0,0,16,0" Style="{StaticResource StatsCardStyle}">
+                    <materialDesign:Card.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#4CAF50" Offset="0"/>
+                            <GradientStop Color="#388E3C" Offset="1"/>
+                        </LinearGradientBrush>
+                    </materialDesign:Card.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                                Width="56" Height="56" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="ClipboardCheck" Width="32" Height="32" 
+                                                     Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                            <TextBlock x:Name="txtTodayAttendance" Text="0" 
+                                       FontSize="40" FontWeight="Bold" 
+                                       Foreground="White"/>
+                            <TextBlock Text="Today's Attendance" 
+                                       FontSize="15" Foreground="White" 
+                                       Opacity="0.9" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
+                            <materialDesign:PackIcon Kind="CheckCircle" Width="16" Height="16" 
+                                                     Foreground="White" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Members checked in" FontSize="12" Foreground="White" Opacity="0.9" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
 
                 <!-- Active Memberships Card -->
-                <materialDesign:Card Grid.Column="2" Margin="10,0,10,0" Background="#FF9800">
-                    <StackPanel Margin="20">
-                        <materialDesign:PackIcon Kind="CardMembership" Width="40" Height="40" 
-                                                 Foreground="White" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="txtActiveMembers" Text="0" 
-                                   FontSize="32" FontWeight="Bold" 
-                                   Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <TextBlock Text="Active Memberships" 
-                                   FontSize="14" Foreground="White" 
-                                   HorizontalAlignment="Center" Opacity="0.9"/>
-                    </StackPanel>
+                <materialDesign:Card Grid.Column="2" Margin="0,0,16,0" Style="{StaticResource StatsCardStyle}">
+                    <materialDesign:Card.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF9800" Offset="0"/>
+                            <GradientStop Color="#F57C00" Offset="1"/>
+                        </LinearGradientBrush>
+                    </materialDesign:Card.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                                Width="56" Height="56" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="CardMembership" Width="32" Height="32" 
+                                                     Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                            <TextBlock x:Name="txtActiveMembers" Text="0" 
+                                       FontSize="40" FontWeight="Bold" 
+                                       Foreground="White"/>
+                            <TextBlock Text="Active Memberships" 
+                                       FontSize="15" Foreground="White" 
+                                       Opacity="0.9" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
+                            <materialDesign:PackIcon Kind="AccountCheck" Width="16" Height="16" 
+                                                     Foreground="White" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Currently active" FontSize="12" Foreground="White" Opacity="0.9" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
 
                 <!-- Payments Due Card -->
-                <materialDesign:Card Grid.Column="3" Margin="10,0,0,0" Background="#F44336">
-                    <StackPanel Margin="20">
-                        <materialDesign:PackIcon Kind="AlertCircle" Width="40" Height="40" 
-                                                 Foreground="White" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="txtPaymentsDue" Text="0" 
-                                   FontSize="32" FontWeight="Bold" 
-                                   Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                        <TextBlock Text="Payments Due" 
-                                   FontSize="14" Foreground="White" 
-                                   HorizontalAlignment="Center" Opacity="0.9"/>
-                    </StackPanel>
+                <materialDesign:Card Grid.Column="3" Style="{StaticResource StatsCardStyle}">
+                    <materialDesign:Card.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#F44336" Offset="0"/>
+                            <GradientStop Color="#D32F2F" Offset="1"/>
+                        </LinearGradientBrush>
+                    </materialDesign:Card.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                                Width="56" Height="56" HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="AlertCircle" Width="32" Height="32" 
+                                                     Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Row="1" Margin="0,16,0,0">
+                            <TextBlock x:Name="txtPaymentsDue" Text="0" 
+                                       FontSize="40" FontWeight="Bold" 
+                                       Foreground="White"/>
+                            <TextBlock Text="Payments Due" 
+                                       FontSize="15" Foreground="White" 
+                                       Opacity="0.9" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,0,0">
+                            <materialDesign:PackIcon Kind="ClockAlert" Width="16" Height="16" 
+                                                     Foreground="White" Opacity="0.9" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Requires attention" FontSize="12" Foreground="White" Opacity="0.9" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </materialDesign:Card>
             </Grid>
 
-            <!-- Recent Attendance -->
-            <materialDesign:Card Margin="0,0,0,20">
-                <StackPanel Margin="20">
-                    <TextBlock Text="Today's Attendance" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
-                    <DataGrid x:Name="dgTodayAttendance" 
-                              AutoGenerateColumns="False" 
-                              IsReadOnly="True"
-                              CanUserAddRows="False"
-                              MaxHeight="300">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
-                            <DataGridTextColumn Header="Check-In Time" Binding="{Binding CheckInTime}" Width="150"/>
-                            <DataGridTextColumn Header="Type" Binding="{Binding AttendanceType}" Width="100"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+            <!-- Content Grid -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Left Column -->
+                <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                    <!-- Recent Attendance -->
+                    <materialDesign:Card UniformCornerRadius="16" Padding="24" Margin="0,0,0,24">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="#e8f5e9" CornerRadius="8" Padding="10" Margin="0,0,12,0">
+                                        <materialDesign:PackIcon Kind="ClipboardTextClockOutline" Width="24" Height="24" Foreground="#00BFA5"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Today's Attendance" FontSize="20" FontWeight="SemiBold" Foreground="#202124"/>
+                                        <TextBlock Text="Latest check-ins" FontSize="13" Foreground="#5f6368"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <DataGrid x:Name="dgTodayAttendance" 
+                                      AutoGenerateColumns="False" 
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="None"
+                                      Background="Transparent"
+                                      RowBackground="White"
+                                      AlternatingRowBackground="#fafafa"
+                                      MaxHeight="320"
+                                      BorderThickness="0">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="Foreground" Value="#5f6368"/>
+                                        <Setter Property="Background" Value="#f5f5f5"/>
+                                        <Setter Property="Padding" Value="16,12"/>
+                                    </Style>
+                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Padding" Value="16,12"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
+                                    <DataGridTextColumn Header="Check-In Time" Binding="{Binding CheckInTime}" Width="150"/>
+                                    <DataGridTextColumn Header="Type" Binding="{Binding AttendanceType}" Width="120"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </materialDesign:Card>
+                    
+                    <!-- Payments Due Soon -->
+                    <materialDesign:Card UniformCornerRadius="16" Padding="24">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="#ffebee" CornerRadius="8" Padding="10" Margin="0,0,12,0">
+                                        <materialDesign:PackIcon Kind="CreditCardClockOutline" Width="24" Height="24" Foreground="#F44336"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Upcoming Payment Dues" FontSize="20" FontWeight="SemiBold" Foreground="#202124"/>
+                                        <TextBlock Text="Members requiring payment" FontSize="13" Foreground="#5f6368"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <DataGrid x:Name="dgPaymentsDue" 
+                                      AutoGenerateColumns="False" 
+                                      IsReadOnly="True"
+                                      CanUserAddRows="False"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="None"
+                                      Background="Transparent"
+                                      RowBackground="White"
+                                      AlternatingRowBackground="#fafafa"
+                                      MaxHeight="320"
+                                      BorderThickness="0">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="Foreground" Value="#5f6368"/>
+                                        <Setter Property="Background" Value="#f5f5f5"/>
+                                        <Setter Property="Padding" Value="16,12"/>
+                                    </Style>
+                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Padding" Value="16,12"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
+                                    <DataGridTextColumn Header="Package" Binding="{Binding PackageName}" Width="140"/>
+                                    <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate}" Width="110"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </materialDesign:Card>
                 </StackPanel>
-            </materialDesign:Card>
-
-            <!-- Payments Due Soon -->
-            <materialDesign:Card>
-                <StackPanel Margin="20">
-                    <TextBlock Text="Upcoming Payment Dues" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
-                    <DataGrid x:Name="dgPaymentsDue" 
-                              AutoGenerateColumns="False" 
-                              IsReadOnly="True"
-                              CanUserAddRows="False"
-                              MaxHeight="300">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
-                            <DataGridTextColumn Header="Package" Binding="{Binding PackageName}" Width="150"/>
-                            <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate}" Width="120"/>
-                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                
+                <!-- Right Column - Quick Actions -->
+                <StackPanel Grid.Column="1">
+                    <materialDesign:Card UniformCornerRadius="16" Padding="20" Margin="0,0,0,24">
+                        <StackPanel>
+                            <TextBlock Text="Quick Actions" FontSize="18" FontWeight="SemiBold" Foreground="#202124" Margin="0,0,0,16"/>
+                            
+                            <Button Height="48" HorizontalAlignment="Stretch" Margin="0,0,0,12"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#00BFA5"
+                                    materialDesign:ButtonAssist.CornerRadius="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Add Member" VerticalAlignment="Center" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Height="48" HorizontalAlignment="Stretch" Margin="0,0,0,12"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#2196F3"
+                                    materialDesign:ButtonAssist.CornerRadius="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ClipboardPlusOutline" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Mark Attendance" VerticalAlignment="Center" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Height="48" HorizontalAlignment="Stretch"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#4CAF50"
+                                    materialDesign:ButtonAssist.CornerRadius="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBlock Text="Add Payment" VerticalAlignment="Center" FontWeight="Medium"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:Card>
+                    
+                    <!-- Activity Summary -->
+                    <materialDesign:Card UniformCornerRadius="16" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Activity Summary" FontSize="18" FontWeight="SemiBold" Foreground="#202124" Margin="0,0,0,16"/>
+                            
+                            <StackPanel Margin="0,0,0,16">
+                                <TextBlock Text="This Week" FontSize="12" Foreground="#5f6368" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <materialDesign:PackIcon Grid.Column="0" Kind="AccountMultiple" Width="20" Height="20" 
+                                                             Foreground="#2196F3" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="45 New Check-ins" FontSize="14" FontWeight="Medium" Foreground="#202124"/>
+                                        <TextBlock Text="15% increase" FontSize="12" Foreground="#4CAF50"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                            
+                            <Separator Margin="0,0,0,16" Background="#e0e0e0"/>
+                            
+                            <StackPanel Margin="0,0,0,16">
+                                <TextBlock Text="Revenue" FontSize="12" Foreground="#5f6368" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <materialDesign:PackIcon Grid.Column="0" Kind="TrendingUp" Width="20" Height="20" 
+                                                             Foreground="#4CAF50" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="$2,450 Collected" FontSize="14" FontWeight="Medium" Foreground="#202124"/>
+                                        <TextBlock Text="This month" FontSize="12" Foreground="#5f6368"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                            
+                            <Separator Margin="0,0,0,16" Background="#e0e0e0"/>
+                            
+                            <StackPanel>
+                                <TextBlock Text="Membership Status" FontSize="12" Foreground="#5f6368" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <materialDesign:PackIcon Grid.Column="0" Kind="CardAccountDetails" Width="20" Height="20" 
+                                                             Foreground="#FF9800" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="85% Retention Rate" FontSize="14" FontWeight="Medium" Foreground="#202124"/>
+                                        <TextBlock Text="Strong performance" FontSize="12" Foreground="#4CAF50"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:Card>
                 </StackPanel>
-            </materialDesign:Card>
+            </Grid>
         </StackPanel>
     </ScrollViewer>
 </Page>
