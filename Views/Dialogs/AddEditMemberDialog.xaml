@@ -1,0 +1,84 @@
+<Window x:Class="GymManagementSystem.Views.Dialogs.AddEditMemberDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Add/Edit Member" 
+        Height="650" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <TextBlock x:Name="txtTitle" Text="Add New Member" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <!-- Photo Section -->
+            <Border BorderBrush="Gray" BorderThickness="1" Width="150" Height="150" 
+                    HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Image x:Name="imgPhoto" Stretch="UniformToFill"/>
+            </Border>
+            <Button x:Name="btnSelectPhoto" Content="Select Photo" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    HorizontalAlignment="Center" Margin="0,0,0,20"
+                    Click="btnSelectPhoto_Click"/>
+
+            <!-- Form Fields -->
+            <TextBox x:Name="txtFullName" 
+                     materialDesign:HintAssist.Hint="Full Name*"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"/>
+
+            <TextBox x:Name="txtPhoneNumber" 
+                     materialDesign:HintAssist.Hint="Phone Number*"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"/>
+
+            <TextBox x:Name="txtNIC" 
+                     materialDesign:HintAssist.Hint="NIC*"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"/>
+
+            <DatePicker x:Name="dpDateOfBirth" 
+                        materialDesign:HintAssist.Hint="Date of Birth"
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        Margin="0,0,0,15"/>
+
+            <ComboBox x:Name="cmbGender" 
+                      materialDesign:HintAssist.Hint="Gender"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,15">
+                <ComboBoxItem Content="Male"/>
+                <ComboBoxItem Content="Female"/>
+                <ComboBoxItem Content="Other"/>
+            </ComboBox>
+
+            <TextBox x:Name="txtEmail" 
+                     materialDesign:HintAssist.Hint="Email"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"/>
+
+            <TextBox x:Name="txtAddress" 
+                     materialDesign:HintAssist.Hint="Address"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     MinLines="3"
+                     MaxLines="3"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     Margin="0,0,0,15"/>
+
+            <CheckBox x:Name="chkIsActive" Content="Active Member" 
+                      IsChecked="True" Margin="0,0,0,20"/>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnCancel" Content="CANCEL" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="100" Height="40" Margin="0,0,10,0"
+                        Click="btnCancel_Click"/>
+                <Button x:Name="btnSave" Content="SAVE" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="100" Height="40"
+                        Click="btnSave_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

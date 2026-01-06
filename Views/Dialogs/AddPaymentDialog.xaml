@@ -1,0 +1,85 @@
+<Window x:Class="GymManagementSystem.Views.Dialogs.AddPaymentDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Add Payment" 
+        Height="550" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <TextBlock Text="Add Payment" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <!-- Member Info -->
+            <materialDesign:Card Margin="0,0,0,20" Background="#E3F2FD">
+                <StackPanel Margin="15">
+                    <TextBlock x:Name="txtMemberInfo" Text="Member: " FontSize="16" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtMemberDetails" Text="" FontSize="12" Margin="0,5,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Payment Form -->
+            <ComboBox x:Name="cmbPackage" 
+                      materialDesign:HintAssist.Hint="Select Membership Package*"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      DisplayMemberPath="DisplayText"
+                      SelectedValuePath="PackageId"
+                      Margin="0,0,0,15"
+                      SelectionChanged="cmbPackage_SelectionChanged"/>
+
+            <TextBox x:Name="txtAmount" 
+                     materialDesign:HintAssist.Hint="Amount (LKR)*"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"
+                     IsReadOnly="True"/>
+
+            <DatePicker x:Name="dpPaymentDate" 
+                        materialDesign:HintAssist.Hint="Payment Date"
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        Margin="0,0,0,15"/>
+
+            <DatePicker x:Name="dpStartDate" 
+                        materialDesign:HintAssist.Hint="Membership Start Date*"
+                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                        Margin="0,0,0,15"
+                        SelectedDateChanged="dpStartDate_SelectedDateChanged"/>
+
+            <TextBox x:Name="txtEndDate" 
+                     materialDesign:HintAssist.Hint="End Date"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,15"
+                     IsReadOnly="True"/>
+
+            <ComboBox x:Name="cmbPaymentMethod" 
+                      materialDesign:HintAssist.Hint="Payment Method"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      Margin="0,0,0,15">
+                <ComboBoxItem Content="Cash" IsSelected="True"/>
+                <ComboBoxItem Content="Card"/>
+                <ComboBoxItem Content="Online Transfer"/>
+                <ComboBoxItem Content="Cheque"/>
+            </ComboBox>
+
+            <TextBox x:Name="txtRemarks" 
+                     materialDesign:HintAssist.Hint="Remarks"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     MinLines="2"
+                     MaxLines="2"
+                     TextWrapping="Wrap"
+                     Margin="0,0,0,20"/>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnCancel" Content="CANCEL" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="100" Height="40" Margin="0,0,10,0"
+                        Click="btnCancel_Click"/>
+                <Button x:Name="btnSave" Content="SAVE PAYMENT" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="150" Height="40"
+                        Click="btnSave_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

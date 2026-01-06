@@ -1,0 +1,62 @@
+<Window x:Class="GymManagementSystem.Views.Dialogs.EnrollFingerprintDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Enroll Fingerprint" 
+        Height="450" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <StackPanel Margin="30">
+        <TextBlock Text="Enroll Member Fingerprint" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+        <!-- Device Info -->
+        <materialDesign:Card Margin="0,0,0,20" Background="#E3F2FD">
+            <StackPanel Margin="15">
+                <TextBlock x:Name="txtDeviceInfo" Text="Device: " FontSize="14" FontWeight="Bold"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- Member Selection -->
+        <ComboBox x:Name="cmbMember" 
+                  materialDesign:HintAssist.Hint="Select Member*"
+                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                  DisplayMemberPath="DisplayText"
+                  SelectedValuePath="MemberId"
+                  IsEditable="True"
+                  IsTextSearchEnabled="True"
+                  Margin="0,0,0,20"/>
+
+        <!-- Instructions -->
+        <materialDesign:Card Margin="0,0,0,20" Background="#FFF3E0">
+            <StackPanel Margin="15">
+                <TextBlock Text="Instructions:" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="1. Select the member from the dropdown" FontSize="12" Margin="0,2"/>
+                <TextBlock Text="2. Click 'Start Enrollment' button" FontSize="12" Margin="0,2"/>
+                <TextBlock Text="3. Place finger on the device sensor" FontSize="12" Margin="0,2"/>
+                <TextBlock Text="4. Follow device prompts for multiple scans" FontSize="12" Margin="0,2"/>
+                <TextBlock Text="5. Wait for confirmation message" FontSize="12" Margin="0,2"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- Status -->
+        <TextBlock x:Name="txtStatus" 
+                   Text="Ready to enroll..." 
+                   FontSize="14" 
+                   Foreground="Blue"
+                   Margin="0,0,0,20"
+                   TextAlignment="Center"/>
+
+        <!-- Action Buttons -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnClose" Content="CLOSE" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Width="100" Height="40" Margin="0,0,10,0"
+                    Click="btnClose_Click"/>
+            <Button x:Name="btnEnroll" Content="START ENROLLMENT" 
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Width="170" Height="40"
+                    Click="btnEnroll_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

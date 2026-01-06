@@ -1,0 +1,186 @@
+<Window x:Class="GymManagementSystem.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Gym Management System" 
+        Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Navigation Bar -->
+        <Border Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}" Height="70">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo and Title -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20,0">
+                    <materialDesign:PackIcon Kind="Dumbbell" Width="40" Height="40" 
+                                             Foreground="White" VerticalAlignment="Center"/>
+                    <StackPanel Margin="15,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="GYM MANAGEMENT SYSTEM" 
+                                   FontSize="18" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock x:Name="txtWelcome" Text="Welcome, Admin" 
+                                   FontSize="12" Foreground="White" Opacity="0.9"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- User Info and Logout -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="20,0">
+                    <Button x:Name="btnLogout" 
+                            Content="LOGOUT" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="White"
+                            BorderBrush="White"
+                            Click="btnLogout_Click"
+                            Height="35"
+                            Margin="10,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Side Menu -->
+            <Border Grid.Column="0" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0">
+                <StackPanel Margin="0,20,0,0">
+                    <Button x:Name="btnDashboard" 
+                            Content="Dashboard" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnDashboard_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ViewDashboard" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Dashboard" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnMembers" 
+                            Content="Members" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnMembers_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="AccountGroup" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Members" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnPayments" 
+                            Content="Payments" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnPayments_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CurrencyUsd" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Payments" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnAttendance" 
+                            Content="Attendance" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnAttendance_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ClipboardCheck" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Attendance" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnPackages" 
+                            Content="Packages" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnPackages_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Package" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Packages" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnBiometric" 
+                            Content="Biometric Devices" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnBiometric_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Fingerprint" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Biometric" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+
+                    <Button x:Name="btnUsers" 
+                            Content="Users" 
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            HorizontalAlignment="Stretch"
+                            Height="50"
+                            FontSize="14"
+                            Click="btnUsers_Click">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="AccountCog" Width="24" Height="24" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Users" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- Content Frame -->
+            <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
+        </Grid>
+    </Grid>
+</Window>
