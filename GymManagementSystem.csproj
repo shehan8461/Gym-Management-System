@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <ApplicationIcon>Resources\gym-icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyTitle>Gym Management System</AssemblyTitle>
-    <Product>Gym Management System</Product>
-    <Company>Gym Management Solutions</Company>
+    <AssemblyTitle>Nano Sonic Gym Management</AssemblyTitle>
+    <Product>Nano Sonic Gym Management</Product>
+    <Company>Nano Sonic Solutions</Company>
     <Description>Professional Gym Management System with Member, Payment, and Attendance Tracking</Description>
     <Copyright>Copyright © 2026</Copyright>
     <Version>1.0.0</Version>
@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\nano-sonic-logo.png" />
     <Folder Include="Resources\Images\" />
     <Folder Include="Resources\MemberPhotos\" />
   </ItemGroup>

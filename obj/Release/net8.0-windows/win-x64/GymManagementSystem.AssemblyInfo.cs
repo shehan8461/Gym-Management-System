@@ -10,14 +10,14 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("Gym Management Solutions")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Nano Sonic Solutions")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2026")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Professional Gym Management System with Member, Payment, and Attendance Tracking")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13781b4067bf18f5984a24b879299e6bfa29da05")]
-[assembly: System.Reflection.AssemblyProductAttribute("Gym Management System")]
-[assembly: System.Reflection.AssemblyTitleAttribute("Gym Management System")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f428129c83ba2d92666dfddffe548f68d29a187")]
+[assembly: System.Reflection.AssemblyProductAttribute("Nano Sonic Gym Management")]
+[assembly: System.Reflection.AssemblyTitleAttribute("Nano Sonic Gym Management")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]

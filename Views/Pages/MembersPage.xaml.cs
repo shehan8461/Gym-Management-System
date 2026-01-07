@@ -102,6 +102,9 @@ namespace GymManagementSystem.Views.Pages
                     }
                     
                     dgMembers.ItemsSource = members;
+                    
+                    // Update statistics cards
+                    UpdateStatistics(members);
                 }
             }
             catch (Exception ex)
@@ -109,6 +112,14 @@ namespace GymManagementSystem.Views.Pages
                 MessageBox.Show($"Error loading members: {ex.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void UpdateStatistics(System.Collections.Generic.List<Models.Member> members)
+        {
+            txtTotalMembers.Text = members.Count.ToString();
+            txtActiveMembers.Text = members.Count(m => m.IsActive).ToString();
+            txtExpiringSoon.Text = members.Count(m => m.PaymentStatus == "Due Soon").ToString();
+            txtOverdue.Text = members.Count(m => m.PaymentStatus == "Overdue").ToString();
         }
 
         private void btnAddMember_Click(object sender, RoutedEventArgs e)
@@ -160,7 +171,7 @@ namespace GymManagementSystem.Views.Pages
 
                         if (lastPayment != null)
                         {
-                            var today = DateTime.UtcNow.Date;
+                            var today = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
                             
                             // Check if the package period is still active (not expired)
                             var daysUntilEnd = (lastPayment.EndDate.Date - today).Days;
@@ -235,6 +246,16 @@ namespace GymManagementSystem.Views.Pages
             if (button?.Tag is int memberId)
             {
                 var dialog = new MemberHistoryDialog(memberId);
+                dialog.ShowDialog();
+            }
+        }
+
+        private void btnAttendance_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag is int memberId)
+            {
+                var dialog = new MemberAttendanceHistoryDialog(memberId);
                 dialog.ShowDialog();
             }
         }

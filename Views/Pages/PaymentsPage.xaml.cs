@@ -71,7 +71,7 @@ namespace GymManagementSystem.Views.Pages
 
         private static string GetPaymentStatus(DateTime nextDueDate, DateTime endDate)
         {
-            var today = DateTime.UtcNow.Date;
+            var today = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
             if (today <= endDate)
                 return "Paid";
             else if (nextDueDate <= today.AddDays(7))
@@ -82,7 +82,7 @@ namespace GymManagementSystem.Views.Pages
 
         private static string GetPaymentStatusDisplay(DateTime nextDueDate, DateTime endDate)
         {
-            var today = DateTime.UtcNow.Date;
+            var today = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
             if (today <= endDate)
                 return "🟢 Paid";
             else if (nextDueDate <= today.AddDays(3))

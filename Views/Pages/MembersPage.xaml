@@ -2,135 +2,441 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      Title="Members">
-    <Grid Margin="30">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+      Title="Members"
+      Background="#f0f2f5">
+    
+    <Page.Resources>
+        <!-- Custom Card Style -->
+        <Style x:Key="StatsCardStyle" TargetType="materialDesign:Card">
+            <Setter Property="UniformCornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32,24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-            <TextBlock Text="Members Management" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
-            <Button x:Name="btnAddMember" 
-                    Content="ADD NEW MEMBER" 
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Margin="20,0,0,0"
-                    Height="40"
-                    Click="btnAddMember_Click"/>
-        </StackPanel>
+            <!-- Enhanced Header with Gradient Background -->
+            <Border Grid.Row="0" CornerRadius="16" Margin="0,0,0,24">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#00897B" Offset="0"/>
+                        <GradientStop Color="#00BFA5" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="#000" BlurRadius="12" ShadowDepth="4" Opacity="0.15"/>
+                </Border.Effect>
+                
+                <Grid Margin="32,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Icon and Title -->
+                    <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="12" VerticalAlignment="Center" Margin="0,0,20,0">
+                        <materialDesign:PackIcon Kind="AccountGroup" Width="32" Height="32" Foreground="#00BFA5"/>
+                    </Border>
+                    
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="Members Management" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                        <TextBlock Text="Manage all gym members, packages, and payments" FontSize="13" Foreground="White" Opacity="0.95" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    
+                    <!-- Add Member Button -->
+                    <Button x:Name="btnAddMember" 
+                            Grid.Column="2"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="White"
+                            Foreground="#00BFA5"
+                            BorderThickness="0"
+                            Click="btnAddMember_Click"
+                            Height="48"
+                            Padding="24,0"
+                            FontWeight="SemiBold"
+                            FontSize="14"
+                            materialDesign:ButtonAssist.CornerRadius="24"
+                            VerticalAlignment="Center">
+                        <Button.Effect>
+                            <DropShadowEffect Color="#000" BlurRadius="8" ShadowDepth="2" Opacity="0.2"/>
+                        </Button.Effect>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountPlus" Width="22" Height="22" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="ADD NEW MEMBER" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
 
-        <!-- Search Bar -->
-        <Grid Grid.Row="1" Margin="0,0,0,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+            <!-- Quick Stats Cards -->
+            <Grid Grid.Row="1" Margin="0,0,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox x:Name="txtSearch" 
-                     Grid.Column="0"
-                     materialDesign:HintAssist.Hint="Search by name, phone, or NIC"
-                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                     FontSize="14"
-                     TextChanged="txtSearch_TextChanged"/>
+                <!-- Total Members Card -->
+                <materialDesign:Card Grid.Column="0" Margin="0,0,12,0" Style="{StaticResource StatsCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" Background="#E3F2FD" CornerRadius="10" Width="48" Height="48" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="AccountMultiple" Width="26" Height="26" 
+                                                     Foreground="#2196F3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtTotalMembers" Text="0" FontSize="24" FontWeight="Bold" Foreground="#2196F3"/>
+                            <TextBlock Text="Total Members" FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
 
-            <Button x:Name="btnRefresh" 
-                    Grid.Column="1"
-                    Content="REFRESH" 
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Margin="10,0,0,0"
-                    Height="40"
-                    Click="btnRefresh_Click"/>
+                <!-- Active Members Card -->
+                <materialDesign:Card Grid.Column="1" Margin="6,0" Style="{StaticResource StatsCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" Background="#E8F5E9" CornerRadius="10" Width="48" Height="48" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="AccountCheck" Width="26" Height="26" 
+                                                     Foreground="#4CAF50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtActiveMembers" Text="0" FontSize="24" FontWeight="Bold" Foreground="#4CAF50"/>
+                            <TextBlock Text="Active Members" FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Expiring Soon Card -->
+                <materialDesign:Card Grid.Column="2" Margin="6,0" Style="{StaticResource StatsCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" Background="#FFF3E0" CornerRadius="10" Width="48" Height="48" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="ClockAlert" Width="26" Height="26" 
+                                                     Foreground="#FF9800" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtExpiringSoon" Text="0" FontSize="24" FontWeight="Bold" Foreground="#FF9800"/>
+                            <TextBlock Text="Due Soon" FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+
+                <!-- Overdue Card -->
+                <materialDesign:Card Grid.Column="3" Margin="12,0,0,0" Style="{StaticResource StatsCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" Background="#FFEBEE" CornerRadius="10" Width="48" Height="48" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="AlertCircle" Width="26" Height="26" 
+                                                     Foreground="#F44336" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtOverdue" Text="0" FontSize="24" FontWeight="Bold" Foreground="#F44336"/>
+                            <TextBlock Text="Overdue" FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+
+            <!-- Enhanced Search Bar -->
+            <materialDesign:Card Grid.Row="2" Padding="20" Margin="0,0,0,20" UniformCornerRadius="12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="txtSearch" 
+                             Grid.Column="0"
+                             materialDesign:HintAssist.Hint="🔍 Search by name, phone, or NIC"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             FontSize="14"
+                             Padding="12"
+                             TextChanged="txtSearch_TextChanged"/>
+
+                    <Button x:Name="btnRefresh" 
+                            Grid.Column="1"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#00BFA5"
+                            Foreground="White"
+                            Margin="12,0,0,0"
+                            Height="48"
+                            Padding="20,0"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            Click="btnRefresh_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="REFRESH" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Enhanced Members DataGrid -->
+            <materialDesign:Card Grid.Row="3" UniformCornerRadius="12" Padding="0">
+                <DataGrid x:Name="dgMembers" 
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          SelectionMode="Single"
+                          MouseDoubleClick="dgMembers_MouseDoubleClick"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="None"
+                          Background="Transparent"
+                          RowBackground="White"
+                          AlternatingRowBackground="#FAFAFA"
+                          BorderThickness="0"
+                          Padding="8">
+                    
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Foreground" Value="#424242"/>
+                            <Setter Property="Background" Value="#F5F5F5"/>
+                            <Setter Property="Padding" Value="12,12"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter Property="BorderBrush" Value="#00BFA5"/>
+                        </Style>
+                        
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                            <Setter Property="Height" Value="56"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#E0F2F1"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                        
+                        <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="12,8"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="70">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#00BFA5"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        
+                        <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="200">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        
+                        <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="130"/>
+                        
+                        <DataGridTextColumn Header="Package" Binding="{Binding AssignedPackageName}" Width="160">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        
+                        <DataGridTemplateColumn Header="Status" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="12" Padding="8,4" HorizontalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PaymentStatus}" Value="Paid">
+                                                        <Setter Property="Background" Value="#E8F5E9"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PaymentStatus}" Value="Due Soon">
+                                                        <Setter Property="Background" Value="#FFF3E0"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PaymentStatus}" Value="Overdue">
+                                                        <Setter Property="Background" Value="#FFEBEE"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PaymentStatus}" Value="No Package">
+                                                        <Setter Property="Background" Value="#F5F5F5"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        
+                                        <TextBlock Text="{Binding PaymentStatus}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PaymentStatus}" Value="Paid">
+                                                            <Setter Property="Foreground" Value="#4CAF50"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PaymentStatus}" Value="Due Soon">
+                                                            <Setter Property="Foreground" Value="#FF9800"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PaymentStatus}" Value="Overdue">
+                                                            <Setter Property="Foreground" Value="#F44336"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PaymentStatus}" Value="No Package">
+                                                            <Setter Property="Foreground" Value="#9E9E9E"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <DataGridTextColumn Header="Next Due" Binding="{Binding NextDueDate, StringFormat=dd/MM/yyyy}" Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="13"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        
+                        <DataGridTemplateColumn Header="Active" Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <materialDesign:PackIcon HorizontalAlignment="Center">
+                                        <materialDesign:PackIcon.Style>
+                                            <Style TargetType="materialDesign:PackIcon">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Kind" Value="CheckCircle"/>
+                                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Kind" Value="CloseCircle"/>
+                                                        <Setter Property="Foreground" Value="#F44336"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </materialDesign:PackIcon.Style>
+                                    </materialDesign:PackIcon>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <DataGridTemplateColumn Header="Actions" Width="*" MinWidth="480">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnEdit_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                Background="#2196F3"
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Pencil" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="Edit" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnAssignPackage_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                Background="#9C27B0"
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Package" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="Package" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnPayment_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                Background="#4CAF50"
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="CurrencyUsd" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="Payment" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnHistory_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                BorderBrush="#00BFA5"
+                                                Foreground="#00BFA5"
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="History" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="History" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnBiometric_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                BorderBrush="#E91E63"
+                                                Foreground="#E91E63"
+                                                materialDesign:ButtonAssist.CornerRadius="6">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Fingerprint" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="Biometric" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </materialDesign:Card>
         </Grid>
-
-        <!-- Members DataGrid -->
-        <materialDesign:Card Grid.Row="2">
-            <DataGrid x:Name="dgMembers" 
-                      AutoGenerateColumns="False" 
-                      IsReadOnly="True"
-                      CanUserAddRows="False"
-                      SelectionMode="Single"
-                      MouseDoubleClick="dgMembers_MouseDoubleClick">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="60"/>
-                    <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*"/>
-                    <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="120"/>
-                    <DataGridTextColumn Header="Assigned Package" Binding="{Binding AssignedPackageName}" Width="150"/>
-                    <DataGridTextColumn Header="Payment Status" Binding="{Binding PaymentStatus}" Width="120">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <Trigger Property="Text" Value="Paid">
-                                        <Setter Property="Foreground" Value="#4CAF50"/>
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                    </Trigger>
-                                    <Trigger Property="Text" Value="Due Soon">
-                                        <Setter Property="Foreground" Value="#FF9800"/>
-                                        <Setter Property="FontWeight" Value="SemiBold"/>
-                                    </Trigger>
-                                    <Trigger Property="Text" Value="Overdue">
-                                        <Setter Property="Foreground" Value="#F44336"/>
-                                        <Setter Property="FontWeight" Value="Bold"/>
-                                    </Trigger>
-                                    <Trigger Property="Text" Value="No Package">
-                                        <Setter Property="Foreground" Value="#9E9E9E"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Next Due" Binding="{Binding NextDueDate, StringFormat=dd/MM/yyyy}" Width="100"/>
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="70"/>
-                    <DataGridTemplateColumn Header="Actions" Width="460">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                    <Button Content="Edit" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Tag="{Binding MemberId}"
-                                            Click="btnEdit_Click"
-                                            MinWidth="58"
-                                            Padding="8,4"
-                                            Margin="0,0,2,0"/>
-                                    <Button Content="Package" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Tag="{Binding MemberId}"
-                                            Click="btnAssignPackage_Click"
-                                            Foreground="#9C27B0"
-                                            MinWidth="72"
-                                            Padding="8,4"
-                                            Margin="2,0,2,0"/>
-                                    <Button Content="Payment" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Tag="{Binding MemberId}"
-                                            Click="btnPayment_Click"
-                                            Foreground="Green"
-                                            MinWidth="72"
-                                            Padding="8,4"
-                                            Margin="2,0,2,0"/>
-                                    <Button Content="History" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Tag="{Binding MemberId}"
-                                            Click="btnHistory_Click"
-                                            Foreground="#2196F3"
-                                            MinWidth="68"
-                                            Padding="8,4"
-                                            Margin="2,0,2,0"/>
-                                    <Button Content="Biometric" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
-                                            Tag="{Binding MemberId}"
-                                            Click="btnBiometric_Click"
-                                            Foreground="#E91E63"
-                                            MinWidth="78"
-                                            Padding="8,4"
-                                            Margin="2,0,0,0"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </materialDesign:Card>
-    </Grid>
+    </ScrollViewer>
 </Page>

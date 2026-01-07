@@ -27,12 +27,24 @@ namespace GymManagementSystem.Views.Pages
                     // Total Members
                     txtTotalMembers.Text = context.Members.Count(m => m.IsActive).ToString();
 
-                    // Today's Attendance (use UTC date)
-                    var today = DateTime.UtcNow.Date;
+                    // Today's Attendance (use local date, stored as UTC date-key)
+                    var today = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
                     var todayAttendance = context.Attendances
                         .Where(a => a.CheckInDate.Date == today)
                         .ToList();
                     txtTodayAttendance.Text = todayAttendance.Count.ToString();
+
+                    // Today's Collection
+                    var tomorrow = today.AddDays(1);
+                    var todaysPaymentsQuery = context.Payments
+                        .Where(p => p.PaymentDate >= today && p.PaymentDate < tomorrow);
+
+                    var todaysCollection = todaysPaymentsQuery.Sum(p => (decimal?)p.Amount) ?? 0m;
+                    var todaysPaymentsCount = todaysPaymentsQuery.Count();
+
+                    txtTodayCollection.Text = $"LKR {todaysCollection:N2}";
+                    txtTodayCollectionCount.Text = $"{todaysPaymentsCount} payments";
+                    txtRevenueToday.Text = $"LKR {todaysCollection:N2}";
 
                     // Active Memberships (have valid payment)
                     var activeMembers = context.Payments
@@ -47,7 +59,6 @@ namespace GymManagementSystem.Views.Pages
                     var paymentsDue = context.Payments
                         .Where(p => p.NextDueDate <= dueDate && p.NextDueDate >= today)
                         .Count();
-                    txtPaymentsDue.Text = paymentsDue.ToString();
 
                     // Load Today's Attendance Grid
                     var attendanceList = context.Attendances

@@ -601,3 +601,5 @@ C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-wi
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\PackageMembersDialog.g.cs
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberHistoryDialog.baml
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberHistoryDialog.g.cs
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberAttendanceHistoryDialog.baml
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberAttendanceHistoryDialog.g.cs

@@ -30,7 +30,7 @@ namespace GymManagementSystem.Views.Pages
                     // Date filter
                     if (filterDate.HasValue)
                     {
-                        var utcDate = filterDate.Value.ToUniversalTime().Date;
+                        var utcDate = DateTime.SpecifyKind(filterDate.Value.Date, DateTimeKind.Utc);
                         query = query.Where(a => a.CheckInDate.Date == utcDate);
                     }
 
