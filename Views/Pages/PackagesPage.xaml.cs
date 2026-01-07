@@ -24,6 +24,13 @@ namespace GymManagementSystem.Views.Pages
                     var packages = context.MembershipPackages
                         .OrderBy(p => p.DurationMonths)
                         .ToList();
+                    
+                    // Count members for each package
+                    foreach (var package in packages)
+                    {
+                        package.MemberCount = context.Members
+                            .Count(m => m.AssignedPackageId == package.PackageId);
+                    }
 
                     dgPackages.ItemsSource = packages;
                 }
@@ -54,6 +61,16 @@ namespace GymManagementSystem.Views.Pages
                 {
                     LoadPackages();
                 }
+            }
+        }
+        
+        private void btnViewMembers_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag is int packageId)
+            {
+                var dialog = new PackageMembersDialog(packageId);
+                dialog.ShowDialog();
             }
         }
     }

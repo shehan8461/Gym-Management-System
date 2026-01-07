@@ -1,0 +1,85 @@
+<Window x:Class="GymManagementSystem.Views.Dialogs.AssignPackageDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Assign Membership Package" 
+        Height="400" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <TextBlock Text="Assign Membership Package" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            
+            <!-- Member Info -->
+            <Border Background="#E3F2FD" Padding="15" CornerRadius="5" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock x:Name="txtMemberInfo" Text="Member: Loading..." FontSize="16" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="txtCurrentPackage" Text="Current Package: None" FontSize="13" Foreground="#5f6368" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Package Selection -->
+            <TextBlock Text="Select Package" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <ComboBox x:Name="cmbPackage" 
+                      materialDesign:HintAssist.Hint="Choose Membership Package"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      DisplayMemberPath="PackageName"
+                      SelectedValuePath="PackageId"
+                      Margin="0,0,0,15"
+                      FontSize="14"/>
+
+            <!-- Package Details -->
+            <Border x:Name="packageDetails" Background="#F5F5F5" Padding="15" CornerRadius="5" Margin="0,0,0,20" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="Package Details:" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="Price:" Grid.Row="0" Grid.Column="0" Margin="0,0,10,5" FontSize="13"/>
+                        <TextBlock x:Name="txtPackagePrice" Text="$0.00" Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" FontSize="13"/>
+                        
+                        <TextBlock Text="Duration:" Grid.Row="1" Grid.Column="0" Margin="0,0,10,5" FontSize="13"/>
+                        <TextBlock x:Name="txtPackageDuration" Text="0 days" Grid.Row="1" Grid.Column="1" FontWeight="SemiBold" FontSize="13"/>
+                        
+                        <TextBlock Text="Description:" Grid.Row="2" Grid.Column="0" Margin="0,0,10,5" FontSize="13" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="txtPackageDescription" Text="" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" FontSize="13"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Custom Amount -->
+            <TextBlock Text="Custom Package Amount (Optional)" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <TextBox x:Name="txtCustomAmount" 
+                     materialDesign:HintAssist.Hint="Leave empty to use default package price"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Margin="0,0,0,20"
+                     PreviewTextInput="txtCustomAmount_PreviewTextInput"/>
+
+            <!-- Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button x:Name="btnCancel" 
+                        Content="CANCEL" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="100"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        Click="btnCancel_Click"/>
+                <Button x:Name="btnSave" 
+                        Content="ASSIGN PACKAGE" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="150"
+                        Height="40"
+                        Click="btnSave_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

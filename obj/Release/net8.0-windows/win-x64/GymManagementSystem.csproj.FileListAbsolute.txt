@@ -595,3 +595,9 @@ C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-wi
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\bin\Release\net8.0-windows\win-x64\Npgsql.dll
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\bin\Release\net8.0-windows\win-x64\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GymManagementSystem.sourcelink.json
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\AssignPackageDialog.baml
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\PackageMembersDialog.baml
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\AssignPackageDialog.g.cs
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\PackageMembersDialog.g.cs
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberHistoryDialog.baml
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\Views\Dialogs\MemberHistoryDialog.g.cs

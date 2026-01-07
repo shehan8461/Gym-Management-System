@@ -24,5 +24,8 @@ namespace GymManagementSystem.Models
         public bool IsActive { get; set; } = true;
         
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        
+        [NotMapped]
+        public int MemberCount { get; set; }
     }
 }

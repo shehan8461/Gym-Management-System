@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
 using GymManagementSystem.Services;
@@ -47,6 +49,22 @@ namespace GymManagementSystem.Views.Dialogs
                         .ToList();
 
                     cmbPackage.ItemsSource = packages;
+                    
+                    // Auto-select member's assigned package if available
+                    if (_member != null && _member.AssignedPackageId.HasValue)
+                    {
+                        var assignedPackage = packages.FirstOrDefault(p => p.PackageId == _member.AssignedPackageId.Value);
+                        if (assignedPackage != null)
+                        {
+                            cmbPackage.SelectedItem = assignedPackage;
+                            
+                            // Use custom amount if set, otherwise use package default price
+                            if (_member.CustomPackageAmount.HasValue)
+                            {
+                                txtAmount.Text = _member.CustomPackageAmount.Value.ToString("N2");
+                            }
+                        }
+                    }
                 }
 
                 // Set default dates
@@ -99,11 +117,18 @@ namespace GymManagementSystem.Views.Dialogs
                     DateTime startDate = dpStartDate.SelectedDate.Value;
                     DateTime endDate = startDate.AddMonths(package.DurationMonths).AddDays(-1);
 
+                    // Parse the amount from the text box
+                    if (!decimal.TryParse(txtAmount.Text.Replace(",", ""), out decimal amount))
+                    {
+                        MessageBox.Show("Please enter a valid amount.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     var payment = new Payment
                     {
                         MemberId = _memberId,
                         PackageId = package.PackageId,
-                        Amount = package.Price,
+                        Amount = amount,
                         PaymentDate = (dpPaymentDate.SelectedDate ?? DateTime.UtcNow.Date).ToUniversalTime(),
                         StartDate = startDate.ToUniversalTime(),
                         EndDate = endDate.ToUniversalTime(),
@@ -138,6 +163,12 @@ namespace GymManagementSystem.Views.Dialogs
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(txtAmount.Text))
+            {
+                MessageBox.Show("Please enter payment amount.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
             if (!dpStartDate.SelectedDate.HasValue)
             {
                 MessageBox.Show("Please select start date.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -145,6 +176,13 @@ namespace GymManagementSystem.Views.Dialogs
             }
 
             return true;
+        }
+
+        private void txtAmount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Allow only numbers and decimal point
+            Regex regex = new Regex(@"^[0-9.]+$");
+            e.Handled = !regex.IsMatch(e.Text);
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

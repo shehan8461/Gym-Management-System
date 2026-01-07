@@ -56,24 +56,75 @@
                     <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="60"/>
                     <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}" Width="*"/>
                     <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="120"/>
-                    <DataGridTextColumn Header="NIC" Binding="{Binding NIC}" Width="120"/>
-                    <DataGridTextColumn Header="Registration Date" Binding="{Binding RegistrationDate, StringFormat=dd/MM/yyyy}" Width="140"/>
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
-                    <DataGridTemplateColumn Header="Actions" Width="200">
+                    <DataGridTextColumn Header="Assigned Package" Binding="{Binding AssignedPackageName}" Width="150"/>
+                    <DataGridTextColumn Header="Payment Status" Binding="{Binding PaymentStatus}" Width="120">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="Paid">
+                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Due Soon">
+                                        <Setter Property="Foreground" Value="#FF9800"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="Overdue">
+                                        <Setter Property="Foreground" Value="#F44336"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="No Package">
+                                        <Setter Property="Foreground" Value="#9E9E9E"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Next Due" Binding="{Binding NextDueDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="70"/>
+                    <DataGridTemplateColumn Header="Actions" Width="460">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                     <Button Content="Edit" 
                                             Style="{StaticResource MaterialDesignFlatButton}"
                                             Tag="{Binding MemberId}"
                                             Click="btnEdit_Click"
-                                            Margin="0,0,5,0"/>
+                                            MinWidth="58"
+                                            Padding="8,4"
+                                            Margin="0,0,2,0"/>
+                                    <Button Content="Package" 
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Tag="{Binding MemberId}"
+                                            Click="btnAssignPackage_Click"
+                                            Foreground="#9C27B0"
+                                            MinWidth="72"
+                                            Padding="8,4"
+                                            Margin="2,0,2,0"/>
                                     <Button Content="Payment" 
                                             Style="{StaticResource MaterialDesignFlatButton}"
                                             Tag="{Binding MemberId}"
                                             Click="btnPayment_Click"
                                             Foreground="Green"
-                                            Margin="5,0,0,0"/>
+                                            MinWidth="72"
+                                            Padding="8,4"
+                                            Margin="2,0,2,0"/>
+                                    <Button Content="History" 
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Tag="{Binding MemberId}"
+                                            Click="btnHistory_Click"
+                                            Foreground="#2196F3"
+                                            MinWidth="68"
+                                            Padding="8,4"
+                                            Margin="2,0,2,0"/>
+                                    <Button Content="Biometric" 
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Tag="{Binding MemberId}"
+                                            Click="btnBiometric_Click"
+                                            Foreground="#E91E63"
+                                            MinWidth="78"
+                                            Padding="8,4"
+                                            Margin="2,0,0,0"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

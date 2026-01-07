@@ -31,16 +31,31 @@
                     <DataGridTextColumn Header="Package Name" Binding="{Binding PackageName}" Width="*"/>
                     <DataGridTextColumn Header="Duration (Months)" Binding="{Binding DurationMonths}" Width="150"/>
                     <DataGridTextColumn Header="Price (LKR)" Binding="{Binding Price, StringFormat=N2}" Width="150"/>
+                    <DataGridTextColumn Header="Members Count" Binding="{Binding MemberCount}" Width="130">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="#00BFA5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
-                    <DataGridTemplateColumn Header="Actions" Width="150">
+                    <DataGridTemplateColumn Header="Actions" Width="220">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Content="Edit" 
                                             Style="{StaticResource MaterialDesignFlatButton}"
                                             Tag="{Binding PackageId}"
-                                            Click="btnEdit_Click"/>
+                                            Click="btnEdit_Click"
+                                            Margin="0,0,5,0"/>
+                                    <Button Content="View Members" 
+                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Tag="{Binding PackageId}"
+                                            Click="btnViewMembers_Click"
+                                            Foreground="#2196F3"
+                                            Margin="5,0,0,0"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -72,7 +72,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                        <Border Grid.Row="0" Background="#00000040" CornerRadius="10" 
                                 Width="56" Height="56" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="AccountGroup" Width="32" Height="32" 
                                                      Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -110,7 +110,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                        <Border Grid.Row="0" Background="#00000040" CornerRadius="10" 
                                 Width="56" Height="56" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="ClipboardCheck" Width="32" Height="32" 
                                                      Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -137,8 +137,8 @@
                 <materialDesign:Card Grid.Column="2" Margin="0,0,16,0" Style="{StaticResource StatsCardStyle}">
                     <materialDesign:Card.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#FF9800" Offset="0"/>
-                            <GradientStop Color="#F57C00" Offset="1"/>
+                            <GradientStop Color="#424242" Offset="0"/>
+                            <GradientStop Color="#212121" Offset="1"/>
                         </LinearGradientBrush>
                     </materialDesign:Card.Background>
                     <Grid>
@@ -148,7 +148,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                        <Border Grid.Row="0" Background="#00000040" CornerRadius="10" 
                                 Width="56" Height="56" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="CardMembership" Width="32" Height="32" 
                                                      Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -186,7 +186,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <Border Grid.Row="0" Background="#ffffff30" CornerRadius="10" 
+                        <Border Grid.Row="0" Background="#00000040" CornerRadius="10" 
                                 Width="56" Height="56" HorizontalAlignment="Left">
                             <materialDesign:PackIcon Kind="AlertCircle" Width="32" Height="32" 
                                                      Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>

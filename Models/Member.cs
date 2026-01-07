@@ -45,8 +45,28 @@ namespace GymManagementSystem.Models
         
         public int? BiometricDeviceId { get; set; }
         
+        // Assigned membership package (separate from payments)
+        public int? AssignedPackageId { get; set; }
+        
+        // Custom amount for assigned package (optional, null means use package default price)
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? CustomPackageAmount { get; set; }
+        
+        [NotMapped]
+        public string? AssignedPackageName { get; set; }
+        
+        [NotMapped]
+        public DateTime? LastPaymentDate { get; set; }
+        
+        [NotMapped]
+        public DateTime? NextDueDate { get; set; }
+        
+        [NotMapped]
+        public string? PaymentStatus { get; set; }
+        
         // Navigation properties
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+        public virtual MembershipPackage? AssignedPackage { get; set; }
     }
 }

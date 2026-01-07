@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Views.Dialogs
 {
@@ -96,7 +97,8 @@ namespace GymManagementSystem.Views.Dialogs
 
                     if (_memberId.HasValue)
                     {
-                        member = context.Members.FirstOrDefault(m => m.MemberId == _memberId);
+                        // Use AsTracking() to enable change tracking for update operations
+                        member = context.Members.AsTracking().FirstOrDefault(m => m.MemberId == _memberId);
                         if (member == null)
                         {
                             MessageBox.Show("Member not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);

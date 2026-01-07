@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using GymManagementSystem.Data;
 using GymManagementSystem.Views.Dialogs;
 using GymManagementSystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Views.Pages
 {
@@ -78,7 +79,8 @@ namespace GymManagementSystem.Views.Pages
                 {
                     using (var context = new GymDbContext())
                     {
-                        var device = context.BiometricDevices.FirstOrDefault(d => d.DeviceId == deviceId);
+                        // Use AsTracking() to enable change tracking for update operations
+                        var device = context.BiometricDevices.AsTracking().FirstOrDefault(d => d.DeviceId == deviceId);
                         if (device != null)
                         {
                             var hikvisionService = new HikvisionService();

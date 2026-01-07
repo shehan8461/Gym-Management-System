@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Views.Dialogs
 {
@@ -59,7 +60,8 @@ namespace GymManagementSystem.Views.Dialogs
 
                     if (_packageId.HasValue)
                     {
-                        package = context.MembershipPackages.FirstOrDefault(p => p.PackageId == _packageId);
+                        // Use AsTracking() to enable change tracking for update operations
+                        package = context.MembershipPackages.AsTracking().FirstOrDefault(p => p.PackageId == _packageId);
                         if (package == null)
                         {
                             MessageBox.Show("Package not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);

@@ -86,7 +86,7 @@
 
                 <!-- User Info and Logout -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="24,0" VerticalAlignment="Center">
-                    <Border Background="#ffffff20" CornerRadius="20" Padding="16,8" Margin="0,0,12,0">
+                    <Border Background="#00000030" CornerRadius="20" Padding="16,8" Margin="0,0,12,0">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Account" Width="24" Height="24" 
                                                      Foreground="White" VerticalAlignment="Center" Margin="0,0,8,0"/>
@@ -170,7 +170,7 @@
                                 Style="{StaticResource MenuButtonStyle}"
                                 Click="btnAttendance_Click">
                             <StackPanel Orientation="Horizontal">
-                                <Border Background="#FF9800" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                <Border Background="#424242" CornerRadius="8" Padding="8" Margin="0,0,16,0">
                                     <materialDesign:PackIcon Kind="ClipboardCheck" Width="24" Height="24" Foreground="White"/>
                                 </Border>
                                 <TextBlock Text="Attendance" VerticalAlignment="Center" FontSize="15"/>

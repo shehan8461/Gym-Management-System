@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementSystem.Views.Dialogs
 {
@@ -61,7 +62,8 @@ namespace GymManagementSystem.Views.Dialogs
 
                     if (_deviceId.HasValue)
                     {
-                        device = context.BiometricDevices.FirstOrDefault(d => d.DeviceId == _deviceId);
+                        // Use AsTracking() to enable change tracking for update operations
+                        device = context.BiometricDevices.AsTracking().FirstOrDefault(d => d.DeviceId == _deviceId);
                         if (device == null)
                         {
                             MessageBox.Show("Device not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);

@@ -14,6 +14,9 @@ namespace GymManagementSystem
             
             try
             {
+                // Apply database migrations first
+                DatabaseMigration.ApplyMigrations();
+                
                 // Initialize database
                 using (var context = new GymDbContext())
                 {

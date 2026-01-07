@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2026")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Professional Gym Management System with Member, Payment, and Attendance Tracking")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8980ea41d7fb60383b57201c614d5656856be19")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13781b4067bf18f5984a24b879299e6bfa29da05")]
 [assembly: System.Reflection.AssemblyProductAttribute("Gym Management System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Gym Management System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
