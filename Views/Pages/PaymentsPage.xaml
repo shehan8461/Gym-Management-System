@@ -115,6 +115,7 @@
                 </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding PaymentId}" Width="70"/>
+                    <DataGridTextColumn Header="Member ID" Binding="{Binding MemberId, StringFormat=MEM-{0:0000}}" Width="140" MinWidth="140"/>
                     <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*" MinWidth="160"/>
                     <DataGridTextColumn Header="Package" Binding="{Binding PackageName}" Width="150"/>
                     <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat='LKR {0:N2}'}" Width="120"/>

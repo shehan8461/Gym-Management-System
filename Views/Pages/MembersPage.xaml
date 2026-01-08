@@ -249,7 +249,7 @@
                     </DataGrid.Resources>
                     
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding MemberId}" Width="70">
+                        <DataGridTextColumn Header="Member ID" Binding="{Binding MemberId, StringFormat=MEM-{0:0000}}" Width="90">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="FontWeight" Value="SemiBold"/>
@@ -424,10 +424,25 @@
                                                 Padding="12,0"
                                                 BorderBrush="#E91E63"
                                                 Foreground="#E91E63"
-                                                materialDesign:ButtonAssist.CornerRadius="6">
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
                                             <StackPanel Orientation="Horizontal">
                                                 <materialDesign:PackIcon Kind="Fingerprint" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                                 <TextBlock Text="Biometric" FontSize="11" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                                Tag="{Binding MemberId}"
+                                                Click="btnDelete_Click"
+                                                Height="32"
+                                                Padding="12,0"
+                                                Background="#F44336"
+                                                materialDesign:ButtonAssist.CornerRadius="6"
+                                                Margin="0,0,6,0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Delete" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <TextBlock Text="Delete" FontSize="11" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </Button>
                                     </StackPanel>

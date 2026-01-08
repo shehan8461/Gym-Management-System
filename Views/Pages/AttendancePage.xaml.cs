@@ -46,6 +46,7 @@ namespace GymManagementSystem.Views.Pages
                         .Select(a => new
                         {
                             a.AttendanceId,
+                            a.MemberId,
                             MemberName = a.Member.FullName,
                             a.CheckInDate,
                             CheckInTimeDisplay = a.CheckInTime.ToString(@"hh\:mm\:ss"),

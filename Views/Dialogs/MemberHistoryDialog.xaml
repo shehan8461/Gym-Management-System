@@ -101,82 +101,131 @@
 
         <!-- Payment History -->
         <materialDesign:Card Grid.Row="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                
-                <Border Grid.Row="0" 
-                        Background="#00BFA5" 
-                        Padding="15">
-                    <TextBlock Text="Payment History" 
-                               FontSize="16" 
-                               FontWeight="Bold" 
-                               Foreground="White"/>
-                </Border>
-                
-                <DataGrid x:Name="dgPaymentHistory" 
-                          Grid.Row="1"
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True"
-                          CanUserAddRows="False"
-                          Margin="10">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Payment ID" Binding="{Binding PaymentId}" Width="80"/>
-                        <DataGridTextColumn Header="Package" Binding="{Binding MembershipPackage.PackageName}" Width="150"/>
-                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=Rs. {0:N2}}" Width="120">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="FontWeight" Value="SemiBold"/>
-                                    <Setter Property="Foreground" Value="Green"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Payment Date" Binding="{Binding PaymentDate, StringFormat=dd/MM/yyyy}" Width="120"/>
-                        <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="110"/>
-                        <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="110"/>
-                        <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="80"/>
-                        <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                
-                <!-- Payment Summary -->
-                <Border Grid.Row="2" 
-                        Background="#E3F2FD" 
-                        Padding="15" 
-                        BorderBrush="#2196F3" 
-                        BorderThickness="0,1,0,0">
+            <TabControl>
+                <TabItem Header="Payments">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <TextBlock Text="Total Payments: " FontWeight="SemiBold" FontSize="14"/>
-                            <TextBlock x:Name="txtTotalPayments" Text="0" FontSize="14" Margin="5,0,0,0"/>
-                        </StackPanel>
-                        
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="20,0,0,0">
-                            <TextBlock Text="Last Payment: " FontWeight="SemiBold" FontSize="14"/>
-                            <TextBlock x:Name="txtLastPaymentDate" Text="N/A" FontSize="14" Margin="5,0,0,0"/>
-                        </StackPanel>
-                        
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="20,0,0,0">
-                            <TextBlock Text="Total Amount: " FontWeight="SemiBold" FontSize="14"/>
-                            <TextBlock x:Name="txtTotalAmount" 
-                                       Text="Rs. 0.00" 
-                                       FontSize="14" 
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" 
+                                Background="#00BFA5" 
+                                Padding="15">
+                            <TextBlock Text="Payment History" 
+                                       FontSize="16" 
                                        FontWeight="Bold" 
-                                       Foreground="Green" 
-                                       Margin="5,0,0,0"/>
-                        </StackPanel>
+                                       Foreground="White"/>
+                        </Border>
+
+                        <DataGrid x:Name="dgPaymentHistory" 
+                                  Grid.Row="1"
+                                  AutoGenerateColumns="False" 
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  Margin="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Payment ID" Binding="{Binding PaymentId}" Width="80"/>
+                                <DataGridTextColumn Header="Package" Binding="{Binding MembershipPackage.PackageName}" Width="150"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=Rs. {0:N2}}" Width="120">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="Foreground" Value="Green"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Payment Date" Binding="{Binding PaymentDate, StringFormat=dd/MM/yyyy}" Width="120"/>
+                                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="110"/>
+                                <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="110"/>
+                                <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="80"/>
+                                <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Border Grid.Row="2" 
+                                Background="#E3F2FD" 
+                                Padding="15" 
+                                BorderBrush="#2196F3" 
+                                BorderThickness="0,1,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <TextBlock Text="Total Payments: " FontWeight="SemiBold" FontSize="14"/>
+                                    <TextBlock x:Name="txtTotalPayments" Text="0" FontSize="14" Margin="5,0,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="20,0,0,0">
+                                    <TextBlock Text="Last Payment: " FontWeight="SemiBold" FontSize="14"/>
+                                    <TextBlock x:Name="txtLastPaymentDate" Text="N/A" FontSize="14" Margin="5,0,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="20,0,0,0">
+                                    <TextBlock Text="Total Amount: " FontWeight="SemiBold" FontSize="14"/>
+                                    <TextBlock x:Name="txtTotalAmount" 
+                                               Text="Rs. 0.00" 
+                                               FontSize="14" 
+                                               FontWeight="Bold" 
+                                               Foreground="Green" 
+                                               Margin="5,0,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </Grid>
-                </Border>
-            </Grid>
+                </TabItem>
+                <TabItem Header="Attendance">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" 
+                                Background="#2196F3" 
+                                Padding="15">
+                            <TextBlock Text="Attendance History" 
+                                       FontSize="16" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"/>
+                        </Border>
+
+                        <DataGrid x:Name="dgAttendanceHistory" 
+                                  Grid.Row="1"
+                                  AutoGenerateColumns="False" 
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  Margin="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Date" Binding="{Binding DateDisplay}" Width="120"/>
+                                <DataGridTextColumn Header="Check-In" Binding="{Binding CheckInDisplay}" Width="110"/>
+                                <DataGridTextColumn Header="Check-Out" Binding="{Binding CheckOutDisplay}" Width="110"/>
+                                <DataGridTextColumn Header="Duration" Binding="{Binding DurationDisplay}" Width="110"/>
+                                <DataGridTextColumn Header="Type" Binding="{Binding AttendanceType}" Width="120"/>
+                                <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <Border Grid.Row="2" 
+                                Background="#E3F2FD" 
+                                Padding="15" 
+                                BorderBrush="#2196F3" 
+                                BorderThickness="0,1,0,0">
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="txtTotalAttendance" Text="Total Attendance: 0 days" FontWeight="SemiBold" FontSize="14"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </materialDesign:Card>
 
         <!-- Close Button -->

@@ -260,6 +260,68 @@ namespace GymManagementSystem.Views.Pages
             }
         }
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag is not int memberId)
+                return;
+
+            try
+            {
+                using (var context = new GymDbContext())
+                {
+                    var member = context.Members.FirstOrDefault(m => m.MemberId == memberId);
+                    if (member == null)
+                    {
+                        MessageBox.Show("Member not found!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    var paymentsCount = context.Payments.Count(p => p.MemberId == memberId);
+                    var attendanceCount = context.Attendances.Count(a => a.MemberId == memberId);
+
+                    var result = MessageBox.Show(
+                        "Are you sure you want to delete this member?\n\n" +
+                        $"Member: {member.FullName}\n" +
+                        $"Payments: {paymentsCount}\n" +
+                        $"Attendance: {attendanceCount}\n\n" +
+                        "This will permanently delete the member and all related records.",
+                        "Confirm Delete",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (result != MessageBoxResult.Yes)
+                        return;
+
+                    using (var tx = context.Database.BeginTransaction())
+                    {
+                        var payments = context.Payments.AsTracking().Where(p => p.MemberId == memberId).ToList();
+                        if (payments.Count > 0)
+                            context.Payments.RemoveRange(payments);
+
+                        var attendances = context.Attendances.AsTracking().Where(a => a.MemberId == memberId).ToList();
+                        if (attendances.Count > 0)
+                            context.Attendances.RemoveRange(attendances);
+
+                        var trackedMember = context.Members.AsTracking().FirstOrDefault(m => m.MemberId == memberId);
+                        if (trackedMember != null)
+                            context.Members.Remove(trackedMember);
+
+                        context.SaveChanges();
+                        tx.Commit();
+                    }
+                }
+
+                MessageBox.Show("Member deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                LoadMembers(txtSearch.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                var innerMsg = ex.InnerException != null ? $"\n\nInner: {ex.InnerException.Message}" : "";
+                MessageBox.Show($"Error deleting member: {ex.Message}{innerMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             txtSearch.Text = "";

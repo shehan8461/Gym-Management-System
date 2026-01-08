@@ -37,6 +37,7 @@ namespace GymManagementSystem.Views.Pages
                         .Select(p => new
                         {
                             p.PaymentId,
+                            p.MemberId,
                             MemberName = p.Member != null ? p.Member.FullName : "Unknown",
                             PackageName = p.MembershipPackage != null ? p.MembershipPackage.PackageName : "Unknown",
                             p.Amount,
