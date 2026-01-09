@@ -20,7 +20,7 @@ namespace GymManagementSystem.Data
                 // Using Neon PostgreSQL Database with optimized settings
                 // Using Oracle Autonomous Database
                 optionsBuilder.UseOracle(
-                    "User Id=ADMIN;Password=Shehan19999@;Data Source=(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))",
+                    "User Id=ADMIN;Password=Shehan19999@;Data Source=(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)));Pooling=true;Min Pool Size=3;Connection Timeout=60;",
                     options => 
                     {
                         options.CommandTimeout(30);

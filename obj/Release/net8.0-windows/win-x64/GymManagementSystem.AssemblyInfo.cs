@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2026")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Professional Gym Management System with Member, Payment, and Attendance Tracking")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d085e5a7867f2de94c0d69e4a59e8bf1a832740f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5062cfaa7ff389541f1f407b5d9fd37d4a922b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nano Sonic Gym Management")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nano Sonic Gym Management")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

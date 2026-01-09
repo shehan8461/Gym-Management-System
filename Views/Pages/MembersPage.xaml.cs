@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,95 +18,108 @@ namespace GymManagementSystem.Views.Pages
             LoadMembers();
         }
 
-        private void LoadMembers(string searchTerm = "")
+        private async void LoadMembers(string searchTerm = "")
         {
             try
             {
-                using (var context = new GymDbContext())
+                // Run heavy DB and processing logic on background thread
+                var result = await Task.Run(async () =>
                 {
-                    var today = DateTime.UtcNow.Date;
-                    
-                    // Use eager loading to prevent N+1 query problem
-                    var query = context.Members
-                        .Include(m => m.AssignedPackage)  // Load package data
-                        .AsQueryable();
-
-                    if (!string.IsNullOrEmpty(searchTerm))
+                    using (var context = new GymDbContext())
                     {
-                        query = query.Where(m => 
-                            m.FullName.Contains(searchTerm) || 
-                            m.PhoneNumber.Contains(searchTerm) || 
-                            m.NIC.Contains(searchTerm));
-                    }
+                        var today = DateTime.UtcNow.Date;
+                        
+                        // Use eager loading to prevent N+1 query problem
+                        var query = context.Members
+                            .Include(m => m.AssignedPackage)  // Load package data
+                            .AsQueryable();
 
-                    var members = query.OrderByDescending(m => m.RegistrationDate).ToList();
-                    
-                    // Get all member IDs for batch payment query
-                    var memberIds = members.Select(m => m.MemberId).ToList();
-                    
-                    // Load all payments in one query (prevents N+1)
-                    var lastPayments = context.Payments
-                        .Where(p => memberIds.Contains(p.MemberId))
-                        .GroupBy(p => new { p.MemberId, p.PackageId })
-                        .Select(g => g.OrderByDescending(p => p.PaymentDate).FirstOrDefault())
-                        .ToList();
-                    
-                    // Calculate payment status for each member
-                    foreach (var member in members)
-                    {
-                        // Get assigned package
-                        if (member.AssignedPackageId.HasValue)
+                        if (!string.IsNullOrEmpty(searchTerm))
                         {
-                            member.AssignedPackageName = member.AssignedPackage?.PackageName ?? "Unknown";
-                            
-                            // Get last payment for the CURRENT assigned package from preloaded data
-                            var lastPaymentForCurrentPackage = lastPayments
-                                .FirstOrDefault(p => p.MemberId == member.MemberId && p.PackageId == member.AssignedPackageId.Value);
-                            
-                            if (lastPaymentForCurrentPackage != null)
+                            query = query.Where(m => 
+                                m.FullName.Contains(searchTerm) || 
+                                m.PhoneNumber.Contains(searchTerm) || 
+                                m.NIC.Contains(searchTerm));
+                        }
+
+                        // Fetch members asynchronously
+                        var members = await query.OrderByDescending(m => m.RegistrationDate).ToListAsync();
+                        
+                        // Get all member IDs for batch payment query
+                        var memberIds = members.Select(m => m.MemberId).ToList();
+                        
+                        // Load all payments in one query (prevents N+1)
+                        // Note: GroupBy in EF Core sometimes needs client evaluation, keeping it simple
+                        var lastPayments = await context.Payments
+                            .Where(p => memberIds.Contains(p.MemberId))
+                            .ToListAsync(); // Fetch all payments for these members to memory
+
+                        // Process in-memory (Grouping)
+                        var lastPaymentsGrouped = lastPayments
+                            .GroupBy(p => new { p.MemberId, p.PackageId })
+                            .Select(g => g.OrderByDescending(p => p.PaymentDate).FirstOrDefault())
+                            .ToList();
+                        
+                        // Calculate payment status for each member
+                        foreach (var member in members)
+                        {
+                            // Get assigned package
+                            if (member.AssignedPackageId.HasValue)
                             {
-                                // Show dates from the payment for the current package
-                                member.LastPaymentDate = lastPaymentForCurrentPackage.PaymentDate;
-                                member.NextDueDate = lastPaymentForCurrentPackage.NextDueDate;
+                                member.AssignedPackageName = member.AssignedPackage?.PackageName ?? "Unknown";
                                 
-                                // Calculate payment status
-                                var daysUntilDue = (lastPaymentForCurrentPackage.NextDueDate.Date - today).Days;
+                                // Get last payment for the CURRENT assigned package from preloaded data
+                                var lastPaymentForCurrentPackage = lastPaymentsGrouped
+                                    .FirstOrDefault(p => p.MemberId == member.MemberId && p.PackageId == member.AssignedPackageId.Value);
                                 
-                                if (daysUntilDue < 0)
+                                if (lastPaymentForCurrentPackage != null)
                                 {
-                                    member.PaymentStatus = "Overdue";
-                                }
-                                else if (daysUntilDue <= 7)
-                                {
-                                    member.PaymentStatus = "Due Soon";
+                                    // Show dates from the payment for the current package
+                                    member.LastPaymentDate = lastPaymentForCurrentPackage.PaymentDate;
+                                    member.NextDueDate = lastPaymentForCurrentPackage.NextDueDate;
+                                    
+                                    // Calculate payment status
+                                    var daysUntilDue = (lastPaymentForCurrentPackage.NextDueDate.Date - today).Days;
+                                    
+                                    if (daysUntilDue < 0)
+                                    {
+                                        member.PaymentStatus = "Overdue";
+                                    }
+                                    else if (daysUntilDue <= 7)
+                                    {
+                                        member.PaymentStatus = "Due Soon";
+                                    }
+                                    else
+                                    {
+                                        member.PaymentStatus = "Paid";
+                                    }
                                 }
                                 else
                                 {
-                                    member.PaymentStatus = "Paid";
+                                    // Package assigned but no payment yet
+                                    member.PaymentStatus = "Payment Required";
+                                    member.LastPaymentDate = null;
+                                    member.NextDueDate = null;
                                 }
                             }
                             else
                             {
-                                // Package assigned but no payment yet
-                                member.PaymentStatus = "Payment Required";
+                                member.AssignedPackageName = "No Package";
+                                member.PaymentStatus = "No Package";
                                 member.LastPaymentDate = null;
                                 member.NextDueDate = null;
                             }
                         }
-                        else
-                        {
-                            member.AssignedPackageName = "No Package";
-                            member.PaymentStatus = "No Package";
-                            member.LastPaymentDate = null;
-                            member.NextDueDate = null;
-                        }
+                        
+                        return members;
                     }
-                    
-                    dgMembers.ItemsSource = members;
-                    
-                    // Update statistics cards
-                    UpdateStatistics(members);
-                }
+                });
+
+                // Update UI on main thread
+                dgMembers.ItemsSource = result;
+                
+                // Update statistics cards
+                UpdateStatistics(result);
             }
             catch (Exception ex)
             {
