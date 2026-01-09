@@ -23,7 +23,7 @@ namespace GymManagementSystem.Models
         [MaxLength(50)]
         public string Role { get; set; } = "Staff"; // Admin, Staff
         
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
         
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         

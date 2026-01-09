@@ -38,7 +38,7 @@ namespace GymManagementSystem.Models
         
         public DateTime RegistrationDate { get; set; } = DateTime.UtcNow;
         
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
         
         // Fingerprint data for biometric
         public byte[]? FingerprintTemplate { get; set; }
@@ -49,7 +49,7 @@ namespace GymManagementSystem.Models
         public int? AssignedPackageId { get; set; }
         
         // Custom amount for assigned package (optional, null means use package default price)
-        [Column(TypeName = "decimal(18,2)")]
+        // [Column(TypeName = "decimal(18,2)")] // Removed for Oracle compatibility (uses NUMBER)
         public decimal? CustomPackageAmount { get; set; }
         
         [NotMapped]

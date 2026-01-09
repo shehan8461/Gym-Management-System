@@ -15,7 +15,7 @@ namespace GymManagementSystem.Models
         [ForeignKey("MembershipPackage")]
         public int PackageId { get; set; }
         
-        [Column(TypeName = "decimal(18,2)")]
+        // [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
         
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;

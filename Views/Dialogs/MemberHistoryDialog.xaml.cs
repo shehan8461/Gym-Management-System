@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Data;
 
@@ -40,6 +41,26 @@ namespace GymManagementSystem.Views.Dialogs
                     txtPhone.Text = member.PhoneNumber;
                     txtRegistrationDate.Text = member.RegistrationDate.ToString("dd/MM/yyyy");
 
+                    // Load member photo
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(member.PhotoPath) && System.IO.File.Exists(member.PhotoPath))
+                        {
+                            var bitmap = new BitmapImage();
+                            bitmap.BeginInit();
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.UriSource = new Uri(member.PhotoPath);
+                            bitmap.EndInit();
+                            imgMemberPhoto.ImageSource = bitmap;
+                        }
+                        else
+                        {
+                            // Could set a default image here if needed
+                            imgMemberPhoto.ImageSource = null;
+                        }
+                    }
+                    catch { /* Ignore image loading errors */ }
+
                     // Load current package info
                     if (member.AssignedPackageId.HasValue)
                     {
@@ -62,10 +83,13 @@ namespace GymManagementSystem.Views.Dialogs
                     dgPaymentHistory.ItemsSource = payments;
 
                     // Load attendance history
-                    var attendances = context.Attendances
+                    var rawAttendances = context.Attendances
                         .Where(a => a.MemberId == _memberId)
                         .OrderByDescending(a => a.CheckInDate)
                         .ThenByDescending(a => a.CheckInTime)
+                        .ToList();
+
+                    var attendances = rawAttendances
                         .Select(a => new
                         {
                             a.CheckInDate,

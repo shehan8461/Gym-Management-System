@@ -18,9 +18,14 @@ namespace GymManagementSystem.Data
             if (!optionsBuilder.IsConfigured)
             {
                 // Using Neon PostgreSQL Database with optimized settings
-                optionsBuilder.UseNpgsql(
-                    "Host=ep-spring-hill-a4gxrjyd-pooler.us-east-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=npg_biCL6PqYxl3Q;SSL Mode=Require;Pooling=true;Minimum Pool Size=5;Maximum Pool Size=100;Connection Idle Lifetime=300;Connection Pruning Interval=10;Command Timeout=30",
-                    options => options.CommandTimeout(30));
+                // Using Oracle Autonomous Database
+                optionsBuilder.UseOracle(
+                    "User Id=ADMIN;Password=Shehan19999@;Data Source=(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))",
+                    options => 
+                    {
+                        options.CommandTimeout(30);
+                        options.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); // Enforce 19c compatibility
+                    });
                 
                 // Disable change tracking for read-only queries (improves performance)
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
@@ -31,63 +36,8 @@ namespace GymManagementSystem.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed default admin user
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    UserId = 1,
-                    Username = "admin",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
-                    FullName = "System Administrator",
-                    Role = "Admin",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow
-                }
-            );
-
-            // Seed default membership packages
-            modelBuilder.Entity<MembershipPackage>().HasData(
-                new MembershipPackage
-                {
-                    PackageId = 1,
-                    PackageName = "Monthly",
-                    DurationMonths = 1,
-                    Price = 3000m,
-                    Description = "1 Month Membership Package",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow
-                },
-                new MembershipPackage
-                {
-                    PackageId = 2,
-                    PackageName = "Quarterly (3 Months)",
-                    DurationMonths = 3,
-                    Price = 8000m,
-                    Description = "3 Months Membership Package with discount",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow
-                },
-                new MembershipPackage
-                {
-                    PackageId = 3,
-                    PackageName = "Half-Yearly (6 Months)",
-                    DurationMonths = 6,
-                    Price = 15000m,
-                    Description = "6 Months Membership Package with better discount",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow
-                },
-                new MembershipPackage
-                {
-                    PackageId = 4,
-                    PackageName = "Yearly (12 Months)",
-                    DurationMonths = 12,
-                    Price = 28000m,
-                    Description = "12 Months Membership Package with best discount",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow
-                }
-            );
+            // Seed default admin user - Removed (handled in App.xaml.cs)
+            // Seed default membership packages - Removed (handled in App.xaml.cs)
 
             // Configure relationships
             modelBuilder.Entity<Payment>()
@@ -148,6 +98,57 @@ namespace GymManagementSystem.Data
             modelBuilder.Entity<Attendance>()
                 .HasIndex(a => a.MemberId)
                 .HasDatabaseName("IX_Attendance_MemberId");
+
+            // Oracle specific type mappings to fix ORA-00902
+            
+            // Map Decimals to NUMBER(18,2)
+            modelBuilder.Entity<Member>()
+                .Property(m => m.CustomPackageAmount)
+                .HasColumnType("NUMBER(18,2)");
+
+            modelBuilder.Entity<MembershipPackage>()
+                .Property(m => m.Price)
+                .HasColumnType("NUMBER(18,2)");
+
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.Amount)
+                .HasColumnType("NUMBER(18,2)");
+
+            // Map TimeSpan to Int64 (Ticks) to avoid INTERVAL data type issues
+            modelBuilder.Entity<Attendance>()
+                .Property(a => a.CheckInTime)
+                .HasConversion(
+                    v => v.Ticks,
+                    v => TimeSpan.FromTicks(v))
+                .HasColumnType("NUMBER(19)"); // Long
+
+            modelBuilder.Entity<Attendance>()
+                .Property(a => a.CheckOutTime)
+                .HasConversion(
+                    v => v != null ? v.Value.Ticks : (long?)null,
+                    v => v.HasValue ? TimeSpan.FromTicks(v.Value) : (TimeSpan?)null)
+                .HasColumnType("NUMBER(19)"); // Long
+
+            // Map byte[] to BLOB explicitly
+            modelBuilder.Entity<Member>()
+                .Property(m => m.FingerprintTemplate)
+                .HasColumnType("BLOB");
+
+            // Map Booleans to NUMBER(1) with conversion - Oracle compatible
+            modelBuilder.Entity<User>().Property(u => u.IsActive)
+                .HasColumnType("NUMBER(1)");
+                
+            modelBuilder.Entity<Member>().Property(m => m.IsActive)
+                .HasColumnType("NUMBER(1)");
+                
+            modelBuilder.Entity<MembershipPackage>().Property(m => m.IsActive)
+                .HasColumnType("NUMBER(1)");
+                
+            modelBuilder.Entity<BiometricDevice>().Property(b => b.IsActive)
+                .HasColumnType("NUMBER(1)");
+                
+            modelBuilder.Entity<BiometricDevice>().Property(b => b.IsConnected)
+                .HasColumnType("NUMBER(1)");
         }
     }
 }

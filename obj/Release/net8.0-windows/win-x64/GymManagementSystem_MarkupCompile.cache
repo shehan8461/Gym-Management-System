@@ -12,8 +12,8 @@ TRACE;RELEASE;NET;NET8_0;NETCOREAPP
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\App.xaml
 20-2014646542
 
-32-225452087
-2161883218222
+311867278953
+217770714282
 Views\Dialogs\AddEditDeviceDialog.xaml;Views\Dialogs\AddEditMemberDialog.xaml;Views\Dialogs\AddEditPackageDialog.xaml;Views\Dialogs\AddPaymentDialog.xaml;Views\Dialogs\AddUserDialog.xaml;Views\Dialogs\AssignPackageDialog.xaml;Views\Dialogs\EnrollFingerprintDialog.xaml;Views\Dialogs\MarkAttendanceDialog.xaml;Views\Dialogs\MemberAttendanceHistoryDialog.xaml;Views\Dialogs\MemberHistoryDialog.xaml;Views\Dialogs\PackageMembersDialog.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\Pages\AttendancePage.xaml;Views\Pages\BiometricPage.xaml;Views\Pages\DashboardPage.xaml;Views\Pages\MembersPage.xaml;Views\Pages\PackagesPage.xaml;Views\Pages\PaymentsPage.xaml;Views\Pages\UsersPage.xaml;
 
 False

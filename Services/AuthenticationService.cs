@@ -51,33 +51,25 @@ namespace GymManagementSystem.Services
 
         public bool CreateUser(string username, string password, string fullName, string role)
         {
-            try
+            using (var context = new GymDbContext())
             {
-                using (var context = new GymDbContext())
+                // Check if username already exists (avoid Any() to prevent boolean literal generation)
+                if (context.Users.FirstOrDefault(u => u.Username == username) != null)
+                    return false;
+                
+                var newUser = new User
                 {
-                    // Check if username already exists
-                    if (context.Users.Any(u => u.Username == username))
-                        return false;
-                    
-                    var newUser = new User
-                    {
-                        Username = username,
-                        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-                        FullName = fullName,
-                        Role = role,
-                        IsActive = true,
-                        CreatedDate = DateTime.UtcNow
-                    };
-                    
-                    context.Users.Add(newUser);
-                    context.SaveChanges();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"User creation error: {ex.Message}");
-                return false;
+                    Username = username,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                    FullName = fullName,
+                    Role = role,
+                    IsActive = true,
+                    CreatedDate = DateTime.UtcNow
+                };
+                
+                context.Users.Add(newUser);
+                context.SaveChanges();
+                return true;
             }
         }
     }

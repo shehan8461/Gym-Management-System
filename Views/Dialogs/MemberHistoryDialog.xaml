@@ -19,11 +19,25 @@
         <materialDesign:Card Grid.Row="0" Margin="0,0,0,15" Padding="20">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <StackPanel Grid.Column="0">
+                <!-- Member Photo -->
+                <Border Grid.Column="0" 
+                        Width="100" 
+                        Height="100" 
+                        CornerRadius="50" 
+                        Margin="0,0,20,0" 
+                        BorderBrush="#00BFA5" 
+                        BorderThickness="2">
+                    <Border.Background>
+                        <ImageBrush x:Name="imgMemberPhoto" Stretch="UniformToFill"/>
+                    </Border.Background>
+                </Border>
+                
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <TextBlock x:Name="txtMemberName" 
                                Text="Member Name" 
                                FontSize="24" 
@@ -34,12 +48,14 @@
                         <TextBlock x:Name="txtMemberId" Text=""/>
                         <TextBlock Text="  |  Phone: " FontWeight="SemiBold" Margin="15,0,0,0"/>
                         <TextBlock x:Name="txtPhone" Text=""/>
-                        <TextBlock Text="  |  Registration: " FontWeight="SemiBold" Margin="15,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock Text="Registration: " FontWeight="SemiBold"/>
                         <TextBlock x:Name="txtRegistrationDate" Text=""/>
                     </StackPanel>
                 </StackPanel>
                 
-                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <TextBlock x:Name="txtPaymentStatus" 
                                Text="Status" 
                                FontSize="16" 

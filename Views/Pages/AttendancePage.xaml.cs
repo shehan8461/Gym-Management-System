@@ -43,6 +43,8 @@ namespace GymManagementSystem.Views.Pages
                     var attendances = query
                         .OrderByDescending(a => a.CheckInDate)
                         .ThenByDescending(a => a.CheckInTime)
+                        .AsNoTracking()
+                        .ToList()
                         .Select(a => new
                         {
                             a.AttendanceId,

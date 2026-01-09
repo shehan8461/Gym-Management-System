@@ -29,11 +29,13 @@ namespace GymManagementSystem.Views.Pages
                     // Search filter
                     if (!string.IsNullOrEmpty(searchTerm))
                     {
-                        query = query.Where(p => p.Member != null && p.Member.FullName.Contains(searchTerm));
+                        query = query.Where(p => p.Member.FullName.Contains(searchTerm));
                     }
 
                     var payments = query
                         .OrderByDescending(p => p.PaymentDate)
+                        .AsNoTracking()
+                        .ToList()
                         .Select(p => new
                         {
                             p.PaymentId,

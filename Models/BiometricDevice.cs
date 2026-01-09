@@ -28,9 +28,9 @@ namespace GymManagementSystem.Models
         [MaxLength(50)]
         public string DeviceType { get; set; } = "Hikvision"; // Hikvision, ZKTeco, etc.
         
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; }
         
-        public bool IsConnected { get; set; } = false;
+        public bool IsConnected { get; set; }
         
         public DateTime? LastConnectedDate { get; set; }
         
