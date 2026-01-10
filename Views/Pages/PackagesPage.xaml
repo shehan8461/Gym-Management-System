@@ -3,59 +3,233 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       Title="Packages">
-    <Grid Margin="30">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-            <TextBlock Text="Membership Packages" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+        <TextBlock Text="Packages" FontSize="28" FontWeight="Bold" Foreground="#202124" Margin="0,0,0,24"/>
+
+        <!-- Statistics Cards -->
+        <Grid Grid.Row="1" Margin="0,0,0,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Total Packages -->
+            <materialDesign:Card Grid.Column="0" Margin="0,0,16,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Total Packages" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="PackageVariant" Foreground="#5e35b1" Width="24" Height="24"/>
+                    </Grid>
+                    <TextBlock x:Name="txtTotalPackages" Text="0" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0"/>
+                    <TextBlock Text="Active Plans" FontSize="12" Foreground="#5e35b1" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Most Popular -->
+            <materialDesign:Card Grid.Column="1" Margin="0,0,16,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Most Popular" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="Star" Foreground="#fbc02d" Width="24" Height="24"/>
+                    </Grid>
+                    <TextBlock x:Name="txtMostPopular" Text="-" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="Member Choice" FontSize="12" Foreground="#fbc02d" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Add Package Button (Prominent) -->
             <Button x:Name="btnAddPackage" 
-                    Content="ADD PACKAGE" 
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Margin="20,0,0,0"
-                    Height="40"
-                    Click="btnAddPackage_Click"/>
-        </StackPanel>
+                    Grid.Column="2"
+                    Height="Auto"
+                    materialDesign:ButtonAssist.CornerRadius="12"
+                    Background="#202124"
+                    BorderBrush="{x:Null}"
+                    Foreground="White"
+                    Click="btnAddPackage_Click"
+                    materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel Orientation="Horizontal" Margin="0,8">
+                    <materialDesign:PackIcon Kind="PlusCircle" Width="32" Height="32" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="NEW PACKAGE" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock Text="Create membership plan" FontSize="12" Opacity="0.8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- Tool Bar -->
+        <Grid Grid.Row="2" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sort/Filter info (Placeholder or Title) -->
+             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <materialDesign:PackIcon Kind="FilterVariant" VerticalAlignment="Center" Foreground="#9e9e9e" Margin="0,0,8,0"/>
+                <TextBlock Text="All Packages" FontSize="16" FontWeight="SemiBold" Foreground="#5f6368"/>
+            </StackPanel>
+
+            <!-- Refresh Button -->
+            <Button x:Name="btnRefresh" 
+                    Grid.Column="1" 
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                    ToolTip="Refresh Data"
+                    Background="White"
+                    BorderBrush="{x:Null}"
+                    Foreground="#5f6368"
+                    Click="btnRefresh_Click"
+                    materialDesign:ElevationAssist.Elevation="Dp1">
+                <materialDesign:PackIcon Kind="Refresh" Width="24" Height="24"/>
+            </Button>
+        </Grid>
 
         <!-- Packages DataGrid -->
-        <materialDesign:Card Grid.Row="1">
+        <materialDesign:Card Grid.Row="3" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp2" Padding="0">
             <DataGrid x:Name="dgPackages" 
                       AutoGenerateColumns="False" 
                       IsReadOnly="True"
-                      CanUserAddRows="False">
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#eeeeee"
+                      Background="White"
+                      RowBackground="White"
+                      BorderThickness="0"
+                      VerticalScrollBarVisibility="Auto">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#5f6368"/>
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Padding" Value="24,16"/>
+                        <Setter Property="Height" Value="56"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#eeeeee"/>
+                    </Style>
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="24,16"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Foreground" Value="#202124"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <Setter Property="Padding" Value="0,8"/>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding PackageId}" Width="60"/>
-                    <DataGridTextColumn Header="Package Name" Binding="{Binding PackageName}" Width="*"/>
-                    <DataGridTextColumn Header="Duration (Months)" Binding="{Binding DurationMonths}" Width="150"/>
-                    <DataGridTextColumn Header="Price (LKR)" Binding="{Binding Price, StringFormat=N2}" Width="150"/>
-                    <DataGridTextColumn Header="Members Count" Binding="{Binding MemberCount}" Width="130">
+                    <DataGridTextColumn Header="#" Binding="{Binding PackageId}" Width="60">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                                <Setter Property="Foreground" Value="#00BFA5"/>
+                                <Setter Property="Foreground" Value="#9e9e9e"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*"/>
-                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="80"/>
-                    <DataGridTemplateColumn Header="Actions" Width="220">
+
+                    <DataGridTextColumn Header="PACKAGE" Binding="{Binding PackageName}" Width="*" MinWidth="180" FontWeight="SemiBold"/>
+                    
+                    <DataGridTemplateColumn Header="DURATION" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Content="Edit" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                    <materialDesign:PackIcon Kind="CalendarClock" Foreground="#1976d2" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{Binding DurationMonths, StringFormat='{}{0} Months'}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="PRICE" Binding="{Binding Price, StringFormat='LKR {0:N2}'}" Width="140" FontWeight="SemiBold"/>
+                    
+                    <DataGridTemplateColumn Header="MEMBERS" Width="120">
+                         <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="12" Background="#e0f2f1" Padding="8,4" HorizontalAlignment="Left" MinWidth="60">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <materialDesign:PackIcon Kind="AccountGroup" Foreground="#00695c" Width="14" Height="14" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                        <TextBlock Text="{Binding MemberCount}" Foreground="#00695c" FontWeight="Bold" FontSize="12"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="STATUS" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="4" Padding="8,2" BorderThickness="1" HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#4caf50"/>
+                                                    <Setter Property="Background" Value="#e8f5e9"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="BorderBrush" Value="#9e9e9e"/>
+                                                    <Setter Property="Background" Value="#f5f5f5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontSize="11" FontWeight="SemiBold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Text" Value="ACTIVE"/>
+                                                        <Setter Property="Foreground" Value="#2e7d32"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Text" Value="INACTIVE"/>
+                                                        <Setter Property="Foreground" Value="#616161"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="ACTIONS" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Edit Package"
                                             Tag="{Binding PackageId}"
                                             Click="btnEdit_Click"
-                                            Margin="0,0,5,0"/>
-                                    <Button Content="View Members" 
-                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                            Height="32" Width="32">
+                                        <materialDesign:PackIcon Kind="Pencil" Foreground="#5f6368"/>
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="View Members"
                                             Tag="{Binding PackageId}"
                                             Click="btnViewMembers_Click"
-                                            Foreground="#2196F3"
-                                            Margin="5,0,0,0"/>
+                                            Height="32" Width="32">
+                                        <materialDesign:PackIcon Kind="AccountDetails" Foreground="#1976d2"/>
+                                    </Button>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

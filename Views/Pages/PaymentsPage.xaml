@@ -5,127 +5,219 @@
       Title="Payments"
       Background="#f0f2f5">
     
-    <Grid Margin="32,24">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Grid Grid.Row="0" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="Payment Management" FontSize="32" FontWeight="Bold" Foreground="#202124"/>
-                <TextBlock Text="Track and manage member payments and subscriptions" 
-                           FontSize="15" Foreground="#5f6368" Margin="0,4,0,0"/>
-            </StackPanel>
-        </Grid>
+        <TextBlock Text="Payments" FontSize="28" FontWeight="Bold" Foreground="#202124" Margin="0,0,0,24"/>
 
-        <!-- Filter Options -->
-        <materialDesign:Card Grid.Row="1" Margin="0,0,0,20" Padding="20" UniformCornerRadius="12">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+        <!-- Statistics Cards -->
+        <Grid Grid.Row="1" Margin="0,0,0,32">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Background="#f5f5f5" CornerRadius="10" Padding="4">
+            <!-- Total Revenue -->
+            <materialDesign:Card Grid.Column="0" Margin="0,0,16,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <materialDesign:PackIcon Grid.Column="0" Kind="Magnify" 
-                                                 Width="24" Height="24" 
-                                                 Foreground="#5f6368" 
-                                                 VerticalAlignment="Center" 
-                                                 Margin="12,0,8,0"/>
-                        
-                        <TextBox x:Name="txtSearch" 
-                                 Grid.Column="1"
-                                 materialDesign:HintAssist.Hint="Search by member name..."
-                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 FontSize="15"
-                                 VerticalAlignment="Center"
-                                 TextChanged="txtSearch_TextChanged"/>
+                        <TextBlock Text="Total Revenue" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="CurrencyUsd" Foreground="#2e7d32" Width="24" Height="24"/>
                     </Grid>
-                </Border>
+                    <TextBlock x:Name="txtTotalRevenue" Text="LKR 0.00" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0"/>
+                    <TextBlock Text="This Month" FontSize="12" Foreground="#2e7d32" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
 
+            <!-- Payments Count -->
+            <materialDesign:Card Grid.Column="1" Margin="0,0,16,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Transactions" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="ReceiptText" Foreground="#1976d2" Width="24" Height="24"/>
+                    </Grid>
+                    <TextBlock x:Name="txtTransactionCount" Text="0" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0"/>
+                    <TextBlock Text="Processed" FontSize="12" Foreground="#1976d2" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Overdue -->
+            <materialDesign:Card Grid.Column="2" Margin="0,0,16,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Overdue" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="AlertCircleOutline" Foreground="#c62828" Width="24" Height="24"/>
+                    </Grid>
+                    <TextBlock x:Name="txtOverdueCount" Text="0" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0"/>
+                    <TextBlock Text="Members" FontSize="12" Foreground="#c62828" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Due Soon -->
+            <materialDesign:Card Grid.Column="3" Margin="0,0,0,0" Padding="20" UniformCornerRadius="12" Background="White" materialDesign:ElevationAssist.Elevation="Dp2">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Due Soon" FontSize="14" Foreground="#5f6368" FontWeight="Medium"/>
+                        <materialDesign:PackIcon Grid.Column="1" Kind="ClockOutline" Foreground="#f57c00" Width="24" Height="24"/>
+                    </Grid>
+                    <TextBlock x:Name="txtDueSoonCount" Text="0" FontSize="24" FontWeight="Bold" Foreground="#202124" Margin="0,8,0,0"/>
+                    <TextBlock Text="Within 7 Days" FontSize="12" Foreground="#f57c00" Margin="0,4,0,0"/>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Search & Filter Bar -->
+        <Grid Grid.Row="2" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Search Box -->
+            <materialDesign:Card UniformCornerRadius="24" Padding="4" materialDesign:ElevationAssist.Elevation="Dp1" Margin="0,0,16,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <materialDesign:PackIcon Kind="Search" Width="24" Height="24" Foreground="#9e9e9e" VerticalAlignment="Center" Margin="16,0,8,0"/>
+                    <TextBox x:Name="txtSearch" 
+                             Grid.Column="1"
+                             materialDesign:HintAssist.Hint="Search members..."
+                             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                             BorderThickness="0"
+                             Padding="0,12"
+                             FontSize="15"
+                             VerticalAlignment="Center"
+                             TextChanged="txtSearch_TextChanged"/>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Status Filter -->
+            <materialDesign:Card Grid.Column="1" UniformCornerRadius="24" Padding="16,4" materialDesign:ElevationAssist.Elevation="Dp1" Margin="0,0,16,0">
                 <ComboBox x:Name="cmbStatusFilter" 
-                          Grid.Column="1"
-                          materialDesign:HintAssist.Hint="Filter by Status"
-                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                          Margin="16,0,0,0"
-                          Height="48"
+                          materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                          BorderThickness="0"
                           FontSize="14"
+                          FontWeight="Medium"
+                          VerticalAlignment="Center"
+                          Width="120"
                           SelectionChanged="cmbStatusFilter_SelectionChanged">
                     <ComboBoxItem Content="All Status" IsSelected="True"/>
-                    <ComboBoxItem Content="Paid"/>
+                    <ComboBoxItem Content="Paid">
+                        <ComboBoxItem.Tag>
+                            <materialDesign:PackIcon Kind="CheckCircle" Foreground="#4caf50"/>
+                        </ComboBoxItem.Tag>
+                    </ComboBoxItem>
                     <ComboBoxItem Content="Due Soon"/>
                     <ComboBoxItem Content="Overdue"/>
                 </ComboBox>
+            </materialDesign:Card>
 
-                <Button x:Name="btnRefresh" 
-                        Grid.Column="2"
-                        Width="48"
-                        Height="48"
-                        Margin="12,0,0,0"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        ToolTip="Refresh"
-                        Click="btnRefresh_Click">
-                    <materialDesign:PackIcon Kind="Refresh" Width="24" Height="24"/>
-                </Button>
-            </Grid>
-        </materialDesign:Card>
+            <!-- Refresh Button -->
+            <Button x:Name="btnRefresh" 
+                    Grid.Column="2" 
+                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                    ToolTip="Refresh Data"
+                    Background="White"
+                    BorderBrush="{x:Null}"
+                    Foreground="#5f6368"
+                    Click="btnRefresh_Click"
+                    materialDesign:ElevationAssist.Elevation="Dp1">
+                <materialDesign:PackIcon Kind="Refresh" Width="24" Height="24"/>
+            </Button>
+        </Grid>
 
         <!-- Payments DataGrid -->
-        <materialDesign:Card Grid.Row="2" Padding="0" UniformCornerRadius="12">
+        <materialDesign:Card Grid.Row="3" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp2" Padding="0">
             <DataGrid x:Name="dgPayments" 
                       AutoGenerateColumns="False" 
                       IsReadOnly="True"
                       CanUserAddRows="False"
                       HeadersVisibility="Column"
-                      GridLinesVisibility="None"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#eeeeee"
                       Background="White"
                       RowBackground="White"
-                      AlternatingRowBackground="#fafafa"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      VerticalScrollBarVisibility="Auto">
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                        <Setter Property="FontWeight" Value="SemiBold"/>
-                        <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="Foreground" Value="#202124"/>
-                        <Setter Property="Background" Value="#f5f5f5"/>
-                        <Setter Property="Padding" Value="16,14"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#5f6368"/>
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Padding" Value="24,16"/>
                         <Setter Property="Height" Value="56"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#eeeeee"/>
                     </Style>
                     <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Padding" Value="16,12"/>
+                        <Setter Property="Padding" Value="24,16"/>
                         <Setter Property="FontSize" Value="14"/>
                         <Setter Property="Foreground" Value="#202124"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style>
                     <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
-                        <Setter Property="Height" Value="64"/>
+                        <Setter Property="Padding" Value="0,8"/>
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding PaymentId}" Width="70"/>
-                    <DataGridTextColumn Header="Member ID" Binding="{Binding MemberId, StringFormat=MEM-{0:0000}}" Width="140" MinWidth="140"/>
-                    <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*" MinWidth="160"/>
-                    <DataGridTextColumn Header="Package" Binding="{Binding PackageName}" Width="150"/>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat='LKR {0:N2}'}" Width="120"/>
-                    <DataGridTextColumn Header="Payment Date" Binding="{Binding PaymentDate, StringFormat=dd/MM/yyyy}" Width="120"/>
-                    <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=dd/MM/yyyy}" Width="110"/>
-                    <DataGridTextColumn Header="Next Due" Binding="{Binding NextDueDate, StringFormat=dd/MM/yyyy}" Width="110"/>
-                    <DataGridTemplateColumn Header="Status" Width="120">
+                    <DataGridTextColumn Header="#" Binding="{Binding PaymentId}" Width="60">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="#9e9e9e"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTemplateColumn Header="MEMBER" Width="*" MinWidth="200">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border CornerRadius="12" Padding="12,6" HorizontalAlignment="Center">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding MemberName}" FontWeight="SemiBold" FontSize="14"/>
+                                    <TextBlock Text="{Binding MemberId, StringFormat='ID: {0}'}" FontSize="12" Foreground="#9e9e9e" Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="PACKAGE" Binding="{Binding PackageName}" Width="140"/>
+                    
+                    <DataGridTextColumn Header="AMOUNT" Binding="{Binding Amount, StringFormat='LKR {0:N2}'}" Width="180" FontWeight="SemiBold"/>
+                    
+                    <DataGridTextColumn Header="DATE" Binding="{Binding PaymentDate, StringFormat='MMM dd, yyyy'}" Width="140" Foreground="#5f6368"/>
+                    
+                    <DataGridTemplateColumn Header="STATUS" Width="130">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="16" Padding="12,4" HorizontalAlignment="Left" MinWidth="90">
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Style.Triggers>
@@ -138,21 +230,31 @@
                                                 <DataTrigger Binding="{Binding StatusDisplay}" Value="Overdue">
                                                     <Setter Property="Background" Value="#ffebee"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding StatusDisplay}" Value="Active">
+                                                    <Setter Property="Background" Value="#e3f2fd"/>
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <TextBlock Text="{Binding StatusDisplay}" FontSize="12" FontWeight="SemiBold">
+                                    <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" FontSize="12" FontWeight="Bold">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding StatusDisplay}" Value="Paid">
                                                         <Setter Property="Foreground" Value="#2e7d32"/>
+                                                        <Setter Property="Text" Value="PAID"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding StatusDisplay}" Value="Due Soon">
-                                                        <Setter Property="Foreground" Value="#f57c00"/>
+                                                        <Setter Property="Foreground" Value="#ef6c00"/>
+                                                        <Setter Property="Text" Value="DUE SOON"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding StatusDisplay}" Value="Overdue">
                                                         <Setter Property="Foreground" Value="#c62828"/>
+                                                        <Setter Property="Text" Value="OVERDUE"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding StatusDisplay}" Value="Active">
+                                                        <Setter Property="Foreground" Value="#1565c0"/>
+                                                        <Setter Property="Text" Value="ACTIVE"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -162,7 +264,8 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="100"/>
+
+                    <DataGridTextColumn Header="METHOD" Binding="{Binding PaymentMethod}" Width="100" Foreground="#5f6368"/>
                 </DataGrid.Columns>
             </DataGrid>
         </materialDesign:Card>

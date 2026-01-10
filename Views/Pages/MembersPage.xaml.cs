@@ -18,13 +18,23 @@ namespace GymManagementSystem.Views.Pages
             LoadMembers();
         }
 
+        private System.Threading.CancellationTokenSource _searchCts;
+        private System.Threading.CancellationTokenSource _loadCts;
+
         private async void LoadMembers(string searchTerm = "")
         {
+            // Cancel previous loading operation if it's still running
+            _loadCts?.Cancel();
+            _loadCts = new System.Threading.CancellationTokenSource();
+            var token = _loadCts.Token;
+
             try
             {
                 // Run heavy DB and processing logic on background thread
                 var result = await Task.Run(async () =>
                 {
+                    if (token.IsCancellationRequested) return null;
+
                     using (var context = new GymDbContext())
                     {
                         var today = DateTime.UtcNow.Date;
@@ -36,23 +46,27 @@ namespace GymManagementSystem.Views.Pages
 
                         if (!string.IsNullOrEmpty(searchTerm))
                         {
+                            var lowerTerm = searchTerm.ToLower();
                             query = query.Where(m => 
-                                m.FullName.Contains(searchTerm) || 
-                                m.PhoneNumber.Contains(searchTerm) || 
-                                m.NIC.Contains(searchTerm));
+                                m.FullName.ToLower().Contains(lowerTerm) || 
+                                m.PhoneNumber.Contains(searchTerm) || // Phone numbers usually numeric/exact
+                                m.NIC.ToLower().Contains(lowerTerm));
                         }
 
-                        // Fetch members asynchronously
-                        var members = await query.OrderByDescending(m => m.RegistrationDate).ToListAsync();
+                        // Fetch members asynchronously with cancellation check
+                        var members = await query.OrderByDescending(m => m.RegistrationDate).ToListAsync(token);
                         
+                        if (token.IsCancellationRequested) return null;
+
                         // Get all member IDs for batch payment query
                         var memberIds = members.Select(m => m.MemberId).ToList();
                         
                         // Load all payments in one query (prevents N+1)
-                        // Note: GroupBy in EF Core sometimes needs client evaluation, keeping it simple
                         var lastPayments = await context.Payments
                             .Where(p => memberIds.Contains(p.MemberId))
-                            .ToListAsync(); // Fetch all payments for these members to memory
+                            .ToListAsync(token); 
+
+                        if (token.IsCancellationRequested) return null;
 
                         // Process in-memory (Grouping)
                         var lastPaymentsGrouped = lastPayments
@@ -113,7 +127,10 @@ namespace GymManagementSystem.Views.Pages
                         
                         return members;
                     }
-                });
+                }, token);
+
+                // If operation was cancelled or returned null, do nothing
+                if (token.IsCancellationRequested || result == null) return;
 
                 // Update UI on main thread
                 dgMembers.ItemsSource = result;
@@ -121,8 +138,18 @@ namespace GymManagementSystem.Views.Pages
                 // Update statistics cards
                 UpdateStatistics(result);
             }
+            catch (TaskCanceledException)
+            {
+                // Ignore cancellation
+            }
             catch (Exception ex)
             {
+                // Ignore Oracle cancellation error (ORA-01013)
+                if (ex.Message.Contains("ORA-01013") || ex.Message.Contains("user requested cancel"))
+                {
+                    return;
+                }
+
                 MessageBox.Show($"Error loading members: {ex.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -342,9 +369,22 @@ namespace GymManagementSystem.Views.Pages
             LoadMembers();
         }
 
-        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private async void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            LoadMembers(txtSearch.Text.Trim());
+            // Debounce search input to prevent excessive DB queries
+            _searchCts?.Cancel();
+            _searchCts = new System.Threading.CancellationTokenSource();
+            var token = _searchCts.Token;
+
+            try
+            {
+                await Task.Delay(300, token); // Wait 300ms
+                LoadMembers(txtSearch.Text.Trim());
+            }
+            catch (TaskCanceledException)
+            {
+                // Ignored
+            }
         }
 
         private void dgMembers_MouseDoubleClick(object sender, MouseButtonEventArgs e)
