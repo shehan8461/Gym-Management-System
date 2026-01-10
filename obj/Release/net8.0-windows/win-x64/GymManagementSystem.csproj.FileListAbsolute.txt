@@ -604,3 +604,5 @@ C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-wi
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GymManagementSystem.pdb
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GymManagementSystem.genruntimeconfig.cache
 C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\ref\GymManagementSystem.dll
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GeneratedInternalTypeHelper.g.cs
+C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Release\net8.0-windows\win-x64\GymManagementSystem_MarkupCompile.lref

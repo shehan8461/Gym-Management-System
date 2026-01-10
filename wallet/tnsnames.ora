@@ -1,0 +1,12 @@
+gymdb01_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gymdb01_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gymdb01_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gymdb01_tp = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_tp.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+gymdb01_tpurgent = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_tpurgent.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+

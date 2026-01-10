@@ -17,15 +17,9 @@ namespace GymManagementSystem.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Using Neon PostgreSQL Database with optimized settings
-                // Using Oracle Autonomous Database
-                optionsBuilder.UseOracle(
-                    "User Id=ADMIN;Password=Shehan19999@;Data Source=(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-tokyo-1.oraclecloud.com))(connect_data=(service_name=gb5de3f0b70bf26_gymdb01_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)));Pooling=true;Min Pool Size=3;Connection Timeout=60;",
-                    options => 
-                    {
-                        options.CommandTimeout(30);
-                        options.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); // Enforce 19c compatibility
-                    });
+                // Neon PostgreSQL Database - Works from ANY PC without IP restrictions
+                optionsBuilder.UseNpgsql(
+                    "Host=ep-spring-hill-a4gxrjyd-pooler.us-east-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=npg_biCL6PqYxl3Q;SSL Mode=Require;Trust Server Certificate=true");
                 
                 // Disable change tracking for read-only queries (improves performance)
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
@@ -35,6 +29,14 @@ namespace GymManagementSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Configure PostgreSQL table names (lowercase)
+            modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<Member>().ToTable("members");
+            modelBuilder.Entity<MembershipPackage>().ToTable("membershippackages");
+            modelBuilder.Entity<Payment>().ToTable("payments");
+            modelBuilder.Entity<Attendance>().ToTable("attendances");
+            modelBuilder.Entity<BiometricDevice>().ToTable("biometricdevices");
 
             // Seed default admin user - Removed (handled in App.xaml.cs)
             // Seed default membership packages - Removed (handled in App.xaml.cs)
@@ -99,56 +101,11 @@ namespace GymManagementSystem.Data
                 .HasIndex(a => a.MemberId)
                 .HasDatabaseName("IX_Attendance_MemberId");
 
-            // Oracle specific type mappings to fix ORA-00902
-            
-            // Map Decimals to NUMBER(18,2)
-            modelBuilder.Entity<Member>()
-                .Property(m => m.CustomPackageAmount)
-                .HasColumnType("NUMBER(18,2)");
-
-            modelBuilder.Entity<MembershipPackage>()
-                .Property(m => m.Price)
-                .HasColumnType("NUMBER(18,2)");
-
-            modelBuilder.Entity<Payment>()
-                .Property(p => p.Amount)
-                .HasColumnType("NUMBER(18,2)");
-
-            // Map TimeSpan to Int64 (Ticks) to avoid INTERVAL data type issues
-            modelBuilder.Entity<Attendance>()
-                .Property(a => a.CheckInTime)
-                .HasConversion(
-                    v => v.Ticks,
-                    v => TimeSpan.FromTicks(v))
-                .HasColumnType("NUMBER(19)"); // Long
-
-            modelBuilder.Entity<Attendance>()
-                .Property(a => a.CheckOutTime)
-                .HasConversion(
-                    v => v != null ? v.Value.Ticks : (long?)null,
-                    v => v.HasValue ? TimeSpan.FromTicks(v.Value) : (TimeSpan?)null)
-                .HasColumnType("NUMBER(19)"); // Long
-
-            // Map byte[] to BLOB explicitly
-            modelBuilder.Entity<Member>()
-                .Property(m => m.FingerprintTemplate)
-                .HasColumnType("BLOB");
-
-            // Map Booleans to NUMBER(1) with conversion - Oracle compatible
-            modelBuilder.Entity<User>().Property(u => u.IsActive)
-                .HasColumnType("NUMBER(1)");
-                
-            modelBuilder.Entity<Member>().Property(m => m.IsActive)
-                .HasColumnType("NUMBER(1)");
-                
-            modelBuilder.Entity<MembershipPackage>().Property(m => m.IsActive)
-                .HasColumnType("NUMBER(1)");
-                
-            modelBuilder.Entity<BiometricDevice>().Property(b => b.IsActive)
-                .HasColumnType("NUMBER(1)");
-                
-            modelBuilder.Entity<BiometricDevice>().Property(b => b.IsConnected)
-                .HasColumnType("NUMBER(1)");
+            // PostgreSQL uses native data types - no custom mappings needed
+            // Decimals → numeric/decimal (automatic)
+            // TimeSpan → interval (automatic)
+            // bool → boolean (automatic)
+            // byte[] → bytea (automatic)
         }
     }
 }
