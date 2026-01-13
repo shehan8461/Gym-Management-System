@@ -25,6 +25,8 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
     <PackageReference Include="MaterialDesignColors" Version="3.0.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>

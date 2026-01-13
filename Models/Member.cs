@@ -63,6 +63,13 @@ namespace GymManagementSystem.Models
         
         [NotMapped]
         public string? PaymentStatus { get; set; }
+
+        // Computed at runtime from FingerprintEnrollmentHistory for UI summaries
+        [NotMapped]
+        public string? FingerprintStatus { get; set; }
+
+        [NotMapped]
+        public DateTime? LastFingerprintEnrollmentDateUtc { get; set; }
         
         // Navigation properties
         public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

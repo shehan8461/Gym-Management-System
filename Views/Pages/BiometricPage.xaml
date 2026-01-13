@@ -41,7 +41,7 @@
                         <DataGridTextColumn Header="Type" Binding="{Binding DeviceType}" Width="100"/>
                         <DataGridTextColumn Header="Status" Binding="{Binding StatusDisplay}" Width="120"/>
                         <DataGridTextColumn Header="Last Connected" Binding="{Binding LastConnectedDate, StringFormat=dd/MM/yyyy HH:mm}" Width="150"/>
-                        <DataGridTemplateColumn Header="Actions" Width="250">
+                        <DataGridTemplateColumn Header="Actions" Width="350">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -51,6 +51,12 @@
                                                 Click="btnTest_Click"
                                                 Foreground="Blue"
                                                 Margin="0,0,5,0"/>
+                                        <Button Content="Sync Users" 
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                Tag="{Binding DeviceId}"
+                                                Click="btnSyncUsers_Click"
+                                                Foreground="Purple"
+                                                Margin="5,0,5,0"/>
                                         <Button Content="Enroll" 
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 Tag="{Binding DeviceId}"

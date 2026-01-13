@@ -1,0 +1,108 @@
+<Window x:Class="GymManagementSystem.Views.Dialogs.SyncUsersDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="Device Users - Sync from Device" 
+        Height="700" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource MaterialDesignPaper}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Users from Fingerprint Device" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Name="txtDeviceInfo" Text="Device: " FontSize="14" Foreground="Gray" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Summary Card -->
+        <materialDesign:Card Grid.Row="1" Margin="0,0,0,15" Background="#E8F5E9">
+            <StackPanel Margin="15" Orientation="Horizontal">
+                <materialDesign:PackIcon Kind="Information" Width="24" Height="24" 
+                                        VerticalAlignment="Center" Foreground="#2E7D32" Margin="0,0,10,0"/>
+                <TextBlock x:Name="txtSummary" Text="Total Users: 0" FontSize="14" 
+                          FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text=" | " FontSize="14" Margin="10,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtMapped" Text="Mapped: 0" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text=" | " FontSize="14" Margin="10,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="txtUnmapped" Text="Unmapped: 0" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <!-- Users List -->
+        <materialDesign:Card Grid.Row="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Bar -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="15,15,15,10">
+                    <TextBox x:Name="txtSearch" 
+                            materialDesign:HintAssist.Hint="Search by ID or Name"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            Width="300"
+                            TextChanged="txtSearch_TextChanged"/>
+                    <Button Content="REFRESH" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="10,0,0,0"
+                            Height="40"
+                            Click="btnRefresh_Click"/>
+                </StackPanel>
+
+                <!-- DataGrid -->
+                <DataGrid x:Name="dgUsers" 
+                          Grid.Row="1"
+                          Margin="15,0,15,15"
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Employee No" Binding="{Binding EmployeeNo}" Width="120"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="200"/>
+                        <DataGridTextColumn Header="User Type" Binding="{Binding UserType}" Width="100"/>
+                        <DataGridTextColumn Header="Valid" Binding="{Binding ValidDisplay}" Width="80"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding MappingStatus}" Width="150"/>
+                        <DataGridTextColumn Header="Mapped Member" Binding="{Binding MappedMemberName}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button x:Name="btnExport" Content="EXPORT TO CSV" 
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Width="150" Height="40" Margin="0,0,10,0"
+                    Click="btnExport_Click"/>
+            <Button x:Name="btnClose" Content="CLOSE" 
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Width="100" Height="40"
+                    Click="btnClose_Click"/>
+        </StackPanel>
+
+        <!-- Info Panel -->
+        <Border Grid.Row="3" Background="#FFF3E0" Padding="15" CornerRadius="4" 
+                Margin="0,15,160,0" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock Text="💡 How to use:" FontWeight="Bold" FontSize="12" Margin="0,0,0,5"/>
+                <TextBlock FontSize="11" TextWrapping="Wrap">
+                    <Run Text="1. Enroll fingerprints directly on the device" FontWeight="SemiBold"/>
+                    <LineBreak/>
+                    <Run Text="2. Click 'Sync Users' to fetch enrolled users"/>
+                    <LineBreak/>
+                    <Run Text="3. Match Employee No with Member ID in your system"/>
+                    <LineBreak/>
+                    <Run Text="4. Users will auto-mark attendance when scanned"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

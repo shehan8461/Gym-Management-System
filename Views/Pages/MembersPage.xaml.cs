@@ -6,7 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GymManagementSystem.Data;
 using GymManagementSystem.Views.Dialogs;
+using System.Windows.Threading;
+using GymManagementSystem.Services;
 using Microsoft.EntityFrameworkCore;
+using GymManagementSystem.Models;
 
 namespace GymManagementSystem.Views.Pages
 {
@@ -15,11 +18,149 @@ namespace GymManagementSystem.Views.Pages
         public MembersPage()
         {
             InitializeComponent();
+            
+            // Initialize Polling Timer
+            _pollTimer = new DispatcherTimer();
+            _pollTimer.Interval = TimeSpan.FromSeconds(2);
+            _pollTimer.Tick += PollTimer_Tick;
+
+            this.Loaded += MembersPage_Loaded;
+            this.Unloaded += MembersPage_Unloaded;
+
             LoadMembers();
         }
 
         private System.Threading.CancellationTokenSource _searchCts;
         private System.Threading.CancellationTokenSource _loadCts;
+        private DispatcherTimer _pollTimer;
+        private DateTime _lastPollTime = DateTime.Now;
+
+        private void MembersPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            _pollTimer.Start();
+        }
+
+        private void MembersPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _pollTimer.Stop();
+        }
+
+        private async void PollTimer_Tick(object? sender, EventArgs e)
+        {
+            try
+            {
+                using (var context = new GymDbContext())
+                {
+                    // Find first connected device
+                    var device = context.BiometricDevices.FirstOrDefault(d => d.IsConnected);
+                    if (device != null)
+                    {
+                        using (var service = new HikvisionService())
+                        {
+                            // We need to re-authenticate/connect to set the BaseURL
+                            // In a production app, we might maintain a singleton service, 
+                            // but for now, we quickly reconnect (lightweight HTTP)
+                            var connected = await service.ConnectAsync(device.IPAddress, device.Port, device.Username, device.Password);
+                            
+                            if (connected.success)
+                            {
+                                var events = await service.GetRecentEventsAsync(_lastPollTime);
+                                if (events != null && events.Any())
+                                {
+                                    // Process events older to newer
+                                    foreach (var evt in events.OrderBy(x => x.GetDateTime()))
+                                    {
+                                        var evtTime = evt.GetDateTime();
+                                        if (evtTime > _lastPollTime)
+                                        {
+                                            _lastPollTime = evtTime;
+                                            
+                                            // Only process fingerprint verification events (minor=25 is fingerprint)
+                                            // currentVerifyMode: 25 = fingerprint, 1 = card, etc.
+                                            bool isFingerprintEvent = evt.currentVerifyMode == 25 || evt.minor == 25;
+                                            
+                                            if (!isFingerprintEvent)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine($"Skipping non-fingerprint event: verifyMode={evt.currentVerifyMode}, minor={evt.minor}");
+                                                continue;
+                                            }
+                                            
+                                            // Check if it's a known member
+                                            if (!string.IsNullOrEmpty(evt.employeeNoString) && int.TryParse(evt.employeeNoString, out int memberId))
+                                            {
+                                                var member = context.Members.Find(memberId);
+                                                if (member != null)
+                                                {
+                                                    // Verify fingerprint is enrolled on device
+                                                    bool fingerprintEnrolled = await service.CheckFingerprintEnrolledAsync(memberId);
+                                                    
+                                                    if (fingerprintEnrolled)
+                                                    {
+                                                        System.Diagnostics.Debug.WriteLine($"✅ Fingerprint match found for Member ID: {memberId} ({member.FullName})");
+                                                        
+                                                        // Check if attendance already recorded today (prevent duplicates)
+                                                        var today = DateTime.UtcNow.Date;
+                                                        var existingAttendance = context.Attendances
+                                                            .FirstOrDefault(a => a.MemberId == memberId && 
+                                                                                 a.CheckInDate.Date == today &&
+                                                                                 a.CheckOutDate == null);
+                                                        
+                                                        if (existingAttendance == null)
+                                                        {
+                                                            // Record new attendance
+                                                            var attendance = new Models.Attendance
+                                                            {
+                                                                MemberId = memberId,
+                                                                CheckInDate = DateTime.UtcNow,
+                                                                CheckInTime = DateTime.UtcNow.TimeOfDay,
+                                                                AttendanceType = "Biometric",
+                                                                Remarks = "Fingerprint scan - Auto recorded"
+                                                            };
+                                                            
+                                                            context.Attendances.Add(attendance);
+                                                            context.SaveChanges();
+                                                            
+                                                            System.Diagnostics.Debug.WriteLine($"📝 Attendance recorded for {member.FullName} at {DateTime.Now:HH:mm:ss}");
+                                                        }
+                                                        else
+                                                        {
+                                                            System.Diagnostics.Debug.WriteLine($"ℹ️ Attendance already recorded today for {member.FullName}");
+                                                        }
+                                                        
+                                                        // Stop timer while dialog is open to prevent overlap
+                                                        _pollTimer.Stop();
+                                                        
+                                                        // Show member history dialog with fingerprint match confirmation
+                                                        var dialog = new MemberHistoryDialog(memberId, true);
+                                                        dialog.ShowDialog();
+                                                        
+                                                        _pollTimer.Start();
+                                                    }
+                                                    else
+                                                    {
+                                                        System.Diagnostics.Debug.WriteLine($"⚠️ Member {memberId} ({member.FullName}) scanned but fingerprint NOT enrolled on device");
+                                                        // Could show a notification here if needed
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine($"⚠️ Fingerprint scanned for EmployeeNo={evt.employeeNoString} but member not found in database");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Silently fail on polling errors to not disrupt UI
+                System.Diagnostics.Debug.WriteLine($"Polling error: {ex.Message}");
+            }
+        }
 
         private async void LoadMembers(string searchTerm = "")
         {
@@ -58,7 +199,7 @@ namespace GymManagementSystem.Views.Pages
                         
                         if (token.IsCancellationRequested) return null;
 
-                        // Get all member IDs for batch payment query
+                        // Get all member IDs for batch payment / fingerprint history queries
                         var memberIds = members.Select(m => m.MemberId).ToList();
                         
                         // Load all payments in one query (prevents N+1)
@@ -68,13 +209,25 @@ namespace GymManagementSystem.Views.Pages
 
                         if (token.IsCancellationRequested) return null;
 
+                        // Load fingerprint enrollment history in one query
+                        var fingerprintHistory = await context.FingerprintEnrollmentHistories
+                            .Where(f => memberIds.Contains(f.MemberId))
+                            .OrderByDescending(f => f.EnrollmentTimeUtc)
+                            .ToListAsync(token);
+
                         // Process in-memory (Grouping)
                         var lastPaymentsGrouped = lastPayments
                             .GroupBy(p => new { p.MemberId, p.PackageId })
                             .Select(g => g.OrderByDescending(p => p.PaymentDate).FirstOrDefault())
                             .ToList();
+
+                        var lastFingerprintByMember = fingerprintHistory
+                            .GroupBy(f => f.MemberId)
+                            .Select(g => g.OrderByDescending(f => f.EnrollmentTimeUtc).FirstOrDefault())
+                            .Where(f => f != null)
+                            .ToDictionary(f => f!.MemberId, f => f!);
                         
-                        // Calculate payment status for each member
+                        // Calculate payment + fingerprint status for each member
                         foreach (var member in members)
                         {
                             // Get assigned package
@@ -122,6 +275,25 @@ namespace GymManagementSystem.Views.Pages
                                 member.PaymentStatus = "No Package";
                                 member.LastPaymentDate = null;
                                 member.NextDueDate = null;
+                            }
+
+                            // Fingerprint summary
+                            if (lastFingerprintByMember.TryGetValue(member.MemberId, out var fp))
+                            {
+                                member.LastFingerprintEnrollmentDateUtc = fp.EnrollmentTimeUtc;
+                                if (fp.IsSuccess)
+                                {
+                                    member.FingerprintStatus = "Enrolled";
+                                }
+                                else
+                                {
+                                    member.FingerprintStatus = $"Last failed ({fp.Status})";
+                                }
+                            }
+                            else
+                            {
+                                member.FingerprintStatus = "Not Enrolled";
+                                member.LastFingerprintEnrollmentDateUtc = null;
                             }
                         }
                         
@@ -273,11 +445,8 @@ namespace GymManagementSystem.Views.Pages
             var button = sender as Button;
             if (button?.Tag is int memberId)
             {
-                MessageBox.Show("Biometric enrollment feature.\nThis will open the biometric device enrollment dialog for fingerprint registration.",
-                    "Biometric Enrollment", MessageBoxButton.OK, MessageBoxImage.Information);
-                // TODO: Implement biometric enrollment dialog
-                // var dialog = new BiometricEnrollDialog(memberId);
-                // dialog.ShowDialog();
+                var dialog = new EnrollFingerprintDialog(memberId);
+                dialog.ShowDialog();
             }
         }
         

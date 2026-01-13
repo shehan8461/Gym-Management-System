@@ -76,8 +76,13 @@
                         Click="btnCancel_Click"/>
                 <Button x:Name="btnSave" Content="SAVE" 
                         Style="{StaticResource MaterialDesignRaisedButton}"
-                        Width="100" Height="40"
+                        Width="100" Height="40" Margin="0,0,10,0"
                         Click="btnSave_Click"/>
+                <Button x:Name="btnSaveAndEnroll" Content="SAVE &amp; ENROLL FINGERPRINT" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Background="#1976D2"
+                        Width="220" Height="40"
+                        Click="btnSaveAndEnroll_Click"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

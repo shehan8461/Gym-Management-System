@@ -200,7 +200,7 @@
                                 <Border Background="#E91E63" CornerRadius="8" Padding="8" Margin="0,0,16,0">
                                     <materialDesign:PackIcon Kind="Fingerprint" Width="24" Height="24" Foreground="White"/>
                                 </Border>
-                                <TextBlock Text="Biometric" VerticalAlignment="Center" FontSize="15"/>
+                                <TextBlock Text="Biometric Management" VerticalAlignment="Center" FontSize="15"/>
                             </StackPanel>
                         </Button>
 

@@ -5,17 +5,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Data;
+using GymManagementSystem.Models;
 
 namespace GymManagementSystem.Views.Dialogs
 {
     public partial class MemberHistoryDialog : Window
     {
         private readonly int _memberId;
+        private readonly bool _fingerprintMatch;
 
-        public MemberHistoryDialog(int memberId)
+        public MemberHistoryDialog(int memberId, bool fingerprintMatch = false)
         {
             InitializeComponent();
             _memberId = memberId;
+            _fingerprintMatch = fingerprintMatch;
             LoadMemberHistory();
         }
 
@@ -40,6 +43,19 @@ namespace GymManagementSystem.Views.Dialogs
                     txtMemberId.Text = member.MemberId.ToString();
                     txtPhone.Text = member.PhoneNumber;
                     txtRegistrationDate.Text = member.RegistrationDate.ToString("dd/MM/yyyy");
+                    
+                    // Check fingerprint enrollment status on device
+                    CheckFingerprintStatus(member);
+                    
+                    // Show notification if triggered by fingerprint match
+                    if (_fingerprintMatch)
+                    {
+                        System.Windows.Media.Color successColor = System.Windows.Media.Color.FromRgb(76, 175, 80);
+                        txtMemberName.Foreground = new SolidColorBrush(successColor);
+                        
+                        // You could also show a toast notification here
+                        System.Diagnostics.Debug.WriteLine($"✅ Fingerprint Match - Member History displayed for {member.FullName}");
+                    }
 
                     // Load member photo
                     try
@@ -108,6 +124,25 @@ namespace GymManagementSystem.Views.Dialogs
 
                     dgAttendanceHistory.ItemsSource = attendances;
                     txtTotalAttendance.Text = $"Total Attendance: {attendances.Count} days";
+
+                    // Load fingerprint enrollment history
+                    var fpHistoryRaw = context.FingerprintEnrollmentHistories
+                        .Where(f => f.MemberId == _memberId)
+                        .OrderByDescending(f => f.EnrollmentTimeUtc)
+                        .ToList();
+
+                    var fpHistory = fpHistoryRaw
+                        .Select(f => new
+                        {
+                            f.DeviceId,
+                            f.Status,
+                            f.IsSuccess,
+                            f.Message,
+                            EnrollmentLocal = f.EnrollmentTimeUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss")
+                        })
+                        .ToList();
+
+                    dgFingerprintHistory.ItemsSource = fpHistory;
 
                     // Calculate and display summary
                     var today = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
@@ -250,6 +285,50 @@ namespace GymManagementSystem.Views.Dialogs
             {
                 MessageBox.Show($"Error loading member history: {ex.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void CheckFingerprintStatus(Models.Member member)
+        {
+            try
+            {
+                using (var context = new GymDbContext())
+                {
+                    var device = context.BiometricDevices.FirstOrDefault(d => d.IsConnected);
+                    if (device != null)
+                    {
+                        using (var service = new GymManagementSystem.Services.HikvisionService())
+                        {
+                            var connected = await service.ConnectAsync(device.IPAddress, device.Port, device.Username, device.Password);
+                            if (connected.success)
+                            {
+                                bool isEnrolled = await service.CheckFingerprintEnrolledAsync(member.MemberId);
+                                
+                                // Update UI to show fingerprint status
+                                // You can add a TextBlock in XAML to display this
+                                System.Diagnostics.Debug.WriteLine($"Fingerprint Status for {member.FullName}: {(isEnrolled ? "✅ Enrolled" : "❌ Not Enrolled")}");
+                                
+                                if (!isEnrolled && !_fingerprintMatch)
+                                {
+                                    // Show warning if fingerprint not enrolled
+                                    MessageBox.Show(
+                                        $"⚠️ Fingerprint Not Enrolled\n\n" +
+                                        $"Member: {member.FullName}\n" +
+                                        $"Member ID: {member.MemberId}\n\n" +
+                                        $"This member's fingerprint is not enrolled on the biometric device.\n" +
+                                        $"Please enroll fingerprint from Biometric page.",
+                                        "Fingerprint Not Enrolled",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Warning);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error checking fingerprint status: {ex.Message}");
             }
         }
 

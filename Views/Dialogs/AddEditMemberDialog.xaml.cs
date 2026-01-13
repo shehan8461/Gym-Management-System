@@ -86,6 +86,16 @@ namespace GymManagementSystem.Views.Dialogs
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            SaveMember(false);
+        }
+        
+        private void btnSaveAndEnroll_Click(object sender, RoutedEventArgs e)
+        {
+            SaveMember(true);
+        }
+        
+        private void SaveMember(bool enrollFingerprint)
+        {
             if (!ValidateInputs())
                 return;
 
@@ -94,6 +104,7 @@ namespace GymManagementSystem.Views.Dialogs
                 using (var context = new GymDbContext())
                 {
                     Member member;
+                    bool isNewMember = !_memberId.HasValue;
 
                     if (_memberId.HasValue)
                     {
@@ -138,9 +149,42 @@ namespace GymManagementSystem.Views.Dialogs
                     }
 
                     context.SaveChanges();
-                    MessageBox.Show("Member saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    DialogResult = true;
-                    Close();
+                    
+                    // Store the member ID for fingerprint enrollment
+                    if (isNewMember)
+                    {
+                        _memberId = member.MemberId;
+                    }
+                    
+                    if (enrollFingerprint)
+                    {
+                        // Check if there's an active biometric device
+                        var hasActiveDevice = context.BiometricDevices.Any(d => d.IsActive);
+                        if (!hasActiveDevice)
+                        {
+                            MessageBox.Show("Member saved successfully!\n\nNo active biometric device found. Please configure a device in the Biometric page first.", 
+                                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                            DialogResult = true;
+                            Close();
+                            return;
+                        }
+                        
+                        MessageBox.Show("Member saved successfully! Now let's enroll the fingerprint.", 
+                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        
+                        // Open enrollment dialog
+                        var enrollDialog = new EnrollFingerprintDialog(_memberId.Value);
+                        enrollDialog.ShowDialog();
+                        
+                        DialogResult = true;
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Member saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        DialogResult = true;
+                        Close();
+                    }
                 }
             }
             catch (Exception ex)

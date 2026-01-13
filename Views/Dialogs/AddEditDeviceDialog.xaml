@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Add/Edit Device" 
-        Height="550" Width="500"
+        Height="650" Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="{DynamicResource MaterialDesignPaper}">
-    <StackPanel Margin="30">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="30">
         <TextBlock x:Name="txtTitle" Text="Add Biometric Device" FontSize="24" FontWeight="Bold" Margin="0,0,0,30"/>
 
         <TextBox x:Name="txtDeviceName" 
@@ -35,6 +36,7 @@
         <PasswordBox x:Name="txtPassword" 
                      materialDesign:HintAssist.Hint="Password*"
                      Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                     Password="12345"
                      Margin="0,0,0,15"/>
 
         <ComboBox x:Name="cmbDeviceType" 
@@ -47,7 +49,36 @@
         </ComboBox>
 
         <CheckBox x:Name="chkIsActive" Content="Active Device" 
-                  IsChecked="True" Margin="0,0,0,30"/>
+                  IsChecked="True" Margin="0,0,0,15"/>
+
+        <!-- Test Connection Section -->
+        <Border Background="#E3F2FD" Padding="20" CornerRadius="8" Margin="0,0,0,20" BorderBrush="#1976D2" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="🔧 Test Connection" FontWeight="Bold" FontSize="14" Foreground="#1976D2" Margin="0,0,0,15"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="btnTest" Content="TEST CONNECTION" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#1976D2"
+                            Width="150" Height="40" 
+                            FontWeight="Bold"
+                            Margin="0,0,10,0"
+                            Click="btnTest_Click"/>
+                    <Button x:Name="btnScan" Content="SCAN DEVICE" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            BorderBrush="#1976D2"
+                            Foreground="#1976D2"
+                            Width="120" Height="40" 
+                            FontWeight="Bold"
+                            Click="btnScan_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="txtTestStatus" 
+                           Text="Click 'Test Connection' to verify device connectivity or 'Scan Device' to discover ports"
+                           FontSize="12" FontStyle="Italic" 
+                           Foreground="#666" Margin="0,15,0,0"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
 
         <!-- Action Buttons -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -61,4 +92,5 @@
                     Click="btnSave_Click"/>
         </StackPanel>
     </StackPanel>
+    </ScrollViewer>
 </Window>

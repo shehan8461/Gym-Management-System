@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Shehan\Desktop\gym management\GymManagementSystem\obj\Debug\net8.0-windows\
+C:\Users\Shehan\Desktop\Gym-Management-System\obj\Debug\net8.0-windows\
 GymManagementSystem
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\Shehan\Desktop\gym management\GymManagementSystem\App.xaml
-20-2014646542
+C:\Users\Shehan\Desktop\Gym-Management-System\App.xaml
+21-814364378
 
-33-279032118
-217770714282
-Views\Dialogs\AddEditDeviceDialog.xaml;Views\Dialogs\AddEditMemberDialog.xaml;Views\Dialogs\AddEditPackageDialog.xaml;Views\Dialogs\AddPaymentDialog.xaml;Views\Dialogs\AddUserDialog.xaml;Views\Dialogs\AssignPackageDialog.xaml;Views\Dialogs\EnrollFingerprintDialog.xaml;Views\Dialogs\MarkAttendanceDialog.xaml;Views\Dialogs\MemberAttendanceHistoryDialog.xaml;Views\Dialogs\MemberHistoryDialog.xaml;Views\Dialogs\PackageMembersDialog.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\Pages\AttendancePage.xaml;Views\Pages\BiometricPage.xaml;Views\Pages\DashboardPage.xaml;Views\Pages\MembersPage.xaml;Views\Pages\PackagesPage.xaml;Views\Pages\PaymentsPage.xaml;Views\Pages\UsersPage.xaml;
+36-330286594
+217728001
+Views\Dialogs\AddEditDeviceDialog.xaml;Views\Dialogs\AddEditMemberDialog.xaml;Views\Dialogs\AddEditPackageDialog.xaml;Views\Dialogs\AddPaymentDialog.xaml;Views\Dialogs\AddUserDialog.xaml;Views\Dialogs\AssignPackageDialog.xaml;Views\Dialogs\EnrollFingerprintDialog.xaml;Views\Dialogs\MarkAttendanceDialog.xaml;Views\Dialogs\MemberAttendanceHistoryDialog.xaml;Views\Dialogs\MemberHistoryDialog.xaml;Views\Dialogs\PackageMembersDialog.xaml;Views\Dialogs\SyncUsersDialog.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\Pages\AttendancePage.xaml;Views\Pages\BiometricPage.xaml;Views\Pages\DashboardPage.xaml;Views\Pages\MembersPage.xaml;Views\Pages\PackagesPage.xaml;Views\Pages\PaymentsPage.xaml;Views\Pages\UsersPage.xaml;
 
 False
 

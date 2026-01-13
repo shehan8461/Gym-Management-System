@@ -355,6 +355,16 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
+                        <!-- Fingerprint summary -->
+                        <DataGridTextColumn Header="Fingerprint" Binding="{Binding FingerprintStatus}" Width="140">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="FontWeight" Value="Medium"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         
                         <DataGridTemplateColumn Header="Actions" Width="*" MinWidth="480">
                             <DataGridTemplateColumn.CellTemplate>

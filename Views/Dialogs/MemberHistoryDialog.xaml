@@ -115,7 +115,7 @@
             </Grid>
         </materialDesign:Card>
 
-        <!-- Payment History -->
+        <!-- Payment / Attendance / Fingerprint History -->
         <materialDesign:Card Grid.Row="2">
             <TabControl>
                 <TabItem Header="Payments">
@@ -239,6 +239,45 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Fingerprint">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0"
+                                Background="#E91E63"
+                                Padding="15">
+                            <TextBlock Text="Fingerprint Enrollment History"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="White"/>
+                        </Border>
+
+                        <DataGrid x:Name="dgFingerprintHistory"
+                                  Grid.Row="1"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  Margin="10">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Date / Time"
+                                                    Binding="{Binding EnrollmentLocal}"
+                                                    Width="160"/>
+                                <DataGridTextColumn Header="Device ID"
+                                                    Binding="{Binding DeviceId}"
+                                                    Width="80"/>
+                                <DataGridTextColumn Header="Result"
+                                                    Binding="{Binding Status}"
+                                                    Width="120"/>
+                                <DataGridTextColumn Header="Details"
+                                                    Binding="{Binding Message}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </TabItem>
             </TabControl>

@@ -3,60 +3,106 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Enroll Fingerprint" 
-        Height="450" Width="500"
+        Height="600" Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="{DynamicResource MaterialDesignPaper}">
-    <StackPanel Margin="30">
-        <TextBlock Text="Enroll Member Fingerprint" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <TextBlock Text="Enroll Member Fingerprint" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 
-        <!-- Device Info -->
-        <materialDesign:Card Margin="0,0,0,20" Background="#E3F2FD">
-            <StackPanel Margin="15">
-                <TextBlock x:Name="txtDeviceInfo" Text="Device: " FontSize="14" FontWeight="Bold"/>
+            <!-- Important Notice -->
+            <materialDesign:Card Margin="0,0,0,20" Background="#FFF3E0" BorderBrush="#FF9800" BorderThickness="2">
+                <StackPanel Margin="15">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <materialDesign:PackIcon Kind="Alert" Foreground="#F57C00" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <TextBlock Text="Manual Device Enrollment Required" FontWeight="Bold" FontSize="16" Foreground="#F57C00"/>
+                    </StackPanel>
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="#5D4037">
+                        <Run Text="DS-K1T8003MF requires physical interaction."/>
+                        <LineBreak/>
+                        <Run Text="After clicking START, go to the device and manually enroll the fingerprint."/>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Device Info -->
+            <materialDesign:Card Margin="0,0,0,20" Background="#E3F2FD">
+                <StackPanel Margin="15">
+                    <TextBlock x:Name="txtDeviceInfo" Text="Device: " FontSize="14" FontWeight="Bold"/>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Member Selection -->
+            <ComboBox x:Name="cmbMember" 
+                      materialDesign:HintAssist.Hint="Select Member*"
+                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                      DisplayMemberPath="DisplayText"
+                      SelectedValuePath="MemberId"
+                      IsEditable="True"
+                      IsTextSearchEnabled="True"
+                      Margin="0,0,0,20"/>
+
+            <!-- Instructions -->
+            <materialDesign:Card Margin="0,0,0,20" Background="#E8F5E9">
+                <StackPanel Margin="15">
+                    <TextBlock Text="Enrollment Steps:" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <TextBlock FontSize="12" Margin="0,2">
+                        <Run Text="1. Select member and click" FontWeight="Normal"/>
+                        <Run Text="START ENROLLMENT" FontWeight="Bold" Foreground="#1976D2"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2">
+                        <Run Text="2. Desktop app creates user on device"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2">
+                        <Run Text="3. Note the" FontWeight="Bold"/>
+                        <Run Text=" Employee ID " FontWeight="Bold" Foreground="#F57C00"/>
+                        <Run Text="shown (same as Member ID)"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2" Foreground="#F57C00" FontWeight="Bold">
+                        <Run Text="4. Go to device → Menu → User Management"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2" Foreground="#F57C00" FontWeight="Bold">
+                        <Run Text="5. Find user by the Employee ID number"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2" Foreground="#F57C00" FontWeight="Bold">
+                        <Run Text="6. Select Enroll Fingerprint → Scan 3-5 times"/>
+                    </TextBlock>
+                    <TextBlock FontSize="12" Margin="0,2">
+                        <Run Text="7. Device shows Success → Click VERIFY ENROLLMENT"/>
+                    </TextBlock>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <!-- Status -->
+            <TextBlock x:Name="txtStatus" 
+                       Text="Ready to enroll..." 
+                       FontSize="14" 
+                       Foreground="Blue"
+                       Margin="0,0,0,20"
+                       TextAlignment="Center"/>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
+                <Button x:Name="btnClose" Content="CLOSE" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="100" Height="40" Margin="0,0,10,0"
+                        Click="btnClose_Click"/>
+                <Button x:Name="btnCheckDevice" Content="SHOW DEVICE USERS" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="180" Height="40" Margin="0,0,10,0"
+                        Click="btnCheckDevice_Click"
+                        ToolTip="View all users currently on the device"/>
+                <Button x:Name="btnVerify" Content="VERIFY ENROLLMENT" 
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="170" Height="40" Margin="0,0,10,0"
+                        Click="btnVerify_Click"
+                        ToolTip="Check if fingerprint was enrolled manually on device"/>
+                <Button x:Name="btnEnroll" Content="START ENROLLMENT" 
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Width="170" Height="40"
+                        Click="btnEnroll_Click"/>
             </StackPanel>
-        </materialDesign:Card>
-
-        <!-- Member Selection -->
-        <ComboBox x:Name="cmbMember" 
-                  materialDesign:HintAssist.Hint="Select Member*"
-                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
-                  DisplayMemberPath="DisplayText"
-                  SelectedValuePath="MemberId"
-                  IsEditable="True"
-                  IsTextSearchEnabled="True"
-                  Margin="0,0,0,20"/>
-
-        <!-- Instructions -->
-        <materialDesign:Card Margin="0,0,0,20" Background="#FFF3E0">
-            <StackPanel Margin="15">
-                <TextBlock Text="Instructions:" FontWeight="Bold" Margin="0,0,0,10"/>
-                <TextBlock Text="1. Select the member from the dropdown" FontSize="12" Margin="0,2"/>
-                <TextBlock Text="2. Click 'Start Enrollment' button" FontSize="12" Margin="0,2"/>
-                <TextBlock Text="3. Place finger on the device sensor" FontSize="12" Margin="0,2"/>
-                <TextBlock Text="4. Follow device prompts for multiple scans" FontSize="12" Margin="0,2"/>
-                <TextBlock Text="5. Wait for confirmation message" FontSize="12" Margin="0,2"/>
-            </StackPanel>
-        </materialDesign:Card>
-
-        <!-- Status -->
-        <TextBlock x:Name="txtStatus" 
-                   Text="Ready to enroll..." 
-                   FontSize="14" 
-                   Foreground="Blue"
-                   Margin="0,0,0,20"
-                   TextAlignment="Center"/>
-
-        <!-- Action Buttons -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="btnClose" Content="CLOSE" 
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Width="100" Height="40" Margin="0,0,10,0"
-                    Click="btnClose_Click"/>
-            <Button x:Name="btnEnroll" Content="START ENROLLMENT" 
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    Width="170" Height="40"
-                    Click="btnEnroll_Click"/>
         </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
 </Window>

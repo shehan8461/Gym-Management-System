@@ -12,6 +12,7 @@ namespace GymManagementSystem.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<BiometricDevice> BiometricDevices { get; set; }
+        public DbSet<FingerprintEnrollmentHistory> FingerprintEnrollmentHistories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,6 +38,7 @@ namespace GymManagementSystem.Data
             modelBuilder.Entity<Payment>().ToTable("payments");
             modelBuilder.Entity<Attendance>().ToTable("attendances");
             modelBuilder.Entity<BiometricDevice>().ToTable("biometricdevices");
+            modelBuilder.Entity<FingerprintEnrollmentHistory>().ToTable("fingerprintenrollmenthistory");
 
             // Seed default admin user - Removed (handled in App.xaml.cs)
             // Seed default membership packages - Removed (handled in App.xaml.cs)
@@ -100,6 +102,14 @@ namespace GymManagementSystem.Data
             modelBuilder.Entity<Attendance>()
                 .HasIndex(a => a.MemberId)
                 .HasDatabaseName("IX_Attendance_MemberId");
+
+            modelBuilder.Entity<FingerprintEnrollmentHistory>()
+                .HasIndex(f => f.MemberId)
+                .HasDatabaseName("IX_FingerprintHistory_MemberId");
+
+            modelBuilder.Entity<FingerprintEnrollmentHistory>()
+                .HasIndex(f => f.EnrollmentTimeUtc)
+                .HasDatabaseName("IX_FingerprintHistory_EnrollmentTimeUtc");
 
             // PostgreSQL uses native data types - no custom mappings needed
             // Decimals → numeric/decimal (automatic)
