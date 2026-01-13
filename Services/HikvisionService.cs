@@ -26,12 +26,25 @@ namespace GymManagementSystem.Services
 
         public HikvisionService()
         {
+            _httpClient = new HttpClient(CreateHandler(null, null));
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+        }
+
+        private HttpClientHandler CreateHandler(string? username, string? password)
+        {
             var handler = new HttpClientHandler()
             {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true,
+                AllowAutoRedirect = true
             };
-            _httpClient = new HttpClient(handler);
-            _httpClient.Timeout = TimeSpan.FromSeconds(30);
+
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            {
+                handler.Credentials = new System.Net.NetworkCredential(username, password);
+                handler.PreAuthenticate = true;
+            }
+
+            return handler;
         }
 
         /// <summary>
@@ -44,21 +57,11 @@ namespace GymManagementSystem.Services
                 var results = new StringBuilder();
                 results.AppendLine($"🔄 Initializing connection to {ipAddress}:{port}...");
 
-                // Create authentication header
-                var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
-                var basicAuthHeader = $"Basic {authValue}";
-
-                // Temporary client for discovery
-                var handler = new HttpClientHandler()
-                {
-                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true,
-                    AllowAutoRedirect = true
-                };
-
+                // Create temporary client with credentials for discovery
+                var handler = CreateHandler(username, password);
                 using (var client = new HttpClient(handler))
                 {
                     client.Timeout = TimeSpan.FromSeconds(5);
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", basicAuthHeader);
 
                     // Step 1: Try the user-provided port
                     var primaryResult = await TryUrlAsync(client, ipAddress, port, "Primary Port");
@@ -66,17 +69,15 @@ namespace GymManagementSystem.Services
 
                     if (primaryResult.success)
                     {
-                        await FinalizeConnection(ipAddress, port, username, password, basicAuthHeader, primaryResult.protocol);
+                        await FinalizeConnection(ipAddress, port, username, password, primaryResult.protocol);
                         results.AppendLine("\n✅ SUCCESS: Connected to device.");
                         return (true, results.ToString());
                     }
 
-                    // Step 2: If primary port (usually 8000) failed, try HTTP fallbacks
-                    // Port 8000 is often the SDK port (binary), whereas ISAPI is usually on 80.
-                    if (port == 8000 && !primaryResult.success)
+                    // Step 2: If primary port failed, try HTTP fallbacks (prioritizing 80)
+                    if (!primaryResult.success)
                     {
-                        results.AppendLine("\n⚠️ Port 8000 failed to respond correctly to HTTP.");
-                        results.AppendLine("🔍 This is common for Hikvision SDK ports. Scanning for ISAPI (HTTP) ports...");
+                        results.AppendLine($"\n⚠️ Primary Port {port} failed. Scanning for ISAPI (HTTP) ports...");
 
                         var fallbacks = new[] { (80, "http"), (443, "https"), (8080, "http") };
                         foreach (var fallback in fallbacks)
@@ -90,7 +91,7 @@ namespace GymManagementSystem.Services
                             {
                                 results.AppendLine($"\n🎯 Found working ISAPI port: {fallback.Item1}");
                                 results.AppendLine($"💡 RECOMMENDED: Update your device settings to use port {fallback.Item1} for faster connections.");
-                                await FinalizeConnection(ipAddress, fallback.Item1, username, password, basicAuthHeader, fallbackResult.protocol);
+                                await FinalizeConnection(ipAddress, fallback.Item1, username, password, fallbackResult.protocol);
                                 return (true, results.ToString());
                             }
                         }
@@ -117,7 +118,6 @@ namespace GymManagementSystem.Services
             var log = new StringBuilder();
             log.AppendLine($"\n[ {label} : {port} ]");
 
-            // Try TCP first
             try
             {
                 using (var tcp = new System.Net.Sockets.TcpClient())
@@ -133,7 +133,6 @@ namespace GymManagementSystem.Services
             }
             catch { log.AppendLine($"   ❌ TCP Port {port}: Failed"); return (false, "http", log.ToString()); }
 
-            // Try HTTP/HTTPS
             string[] protocols = port == 443 ? new[] { "https" } : new[] { "http", "https" };
             foreach (var proto in protocols)
             {
@@ -144,9 +143,15 @@ namespace GymManagementSystem.Services
                     var response = await client.GetAsync(url);
                     log.AppendLine($"   📡 Status: {response.StatusCode}");
 
-                    // 200 OK or 401 Unauthorized both mean the API is there
-                    if (response.IsSuccessStatusCode || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    if (response.IsSuccessStatusCode)
                     {
+                        return (true, proto, log.ToString());
+                    }
+                    // If we get 401, it implies server is there but maybe our Digest dance failed or creds are wrong.
+                    // But we treat it as valid service found for now, just failed auth.
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        log.AppendLine("   ⚠️ Service found (401), checking credentials...");
                         return (true, proto, log.ToString());
                     }
                 }
@@ -159,7 +164,7 @@ namespace GymManagementSystem.Services
             return (false, "http", log.ToString());
         }
 
-        private async Task FinalizeConnection(string ip, int port, string user, string pass, string auth, string proto)
+        private async Task FinalizeConnection(string ip, int port, string user, string pass, string proto)
         {
             _baseUrl = $"{proto}://{ip}:{port}/ISAPI";
             _username = user;
@@ -167,16 +172,10 @@ namespace GymManagementSystem.Services
             _isConnected = true;
 
             _httpClient?.Dispose();
-            var handler = new HttpClientHandler()
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-            };
-            _httpClient = new HttpClient(handler);
+            _httpClient = new HttpClient(CreateHandler(user, pass));
             _httpClient.Timeout = TimeSpan.FromSeconds(30);
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", auth);
             _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json, text/xml, */*");
             
-            // Validate credentials and set ready status
             await ValidateCredentialsAsync();
         }
 
@@ -417,12 +416,13 @@ namespace GymManagementSystem.Services
                             scanResult.IsSuccessful = true;
                             scanResult.Message = "Port is open";
                             
-                            // Check for Hikvision
-                            using (var client = new HttpClient())
+                            try
                             {
-                                client.Timeout = TimeSpan.FromSeconds(2);
-                                try
+                                // Scan with just a basic client to see if it responds HTTP
+                                using (var handler = new HttpClientHandler())
+                                using (var client = new HttpClient(handler))
                                 {
+                                    client.Timeout = TimeSpan.FromSeconds(2);
                                     var resp = await client.GetAsync($"http://{ipAddress}:{port}/ISAPI/System/deviceInfo");
                                     if (resp.IsSuccessStatusCode || resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                                     {
@@ -430,8 +430,8 @@ namespace GymManagementSystem.Services
                                         scanResult.Message += " (Hikvision ISAPI detected)";
                                     }
                                 }
-                                catch { }
                             }
+                            catch { }
                         }
                     }
                 }
@@ -451,17 +451,8 @@ namespace GymManagementSystem.Services
 
         private HttpClient CreateFreshHttpClient()
         {
-            var handler = new HttpClientHandler()
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-            };
-            var client = new HttpClient(handler);
+            var client = new HttpClient(CreateHandler(_username, _password));
             client.Timeout = TimeSpan.FromSeconds(10);
-            if (!string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password))
-            {
-                var authValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_username}:{_password}"));
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Basic {authValue}");
-            }
             client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "iVMS-4200");
             client.DefaultRequestHeaders.ConnectionClose = true;
             return client;
