@@ -481,14 +481,62 @@ namespace GymManagementSystem.Services
 
         public async Task<(bool success, string message)> CaptureFingerPrintAsync(int memberId)
         {
-            // Simple implementation for DS-K1T8003MF
-            return (true, "Please place your finger on the device sensor now.");
+            try
+            {
+                EnsureHttpClientConfigured();
+
+                // Switch to XML as some devices have issues with JSON for this specific command
+                // or require strict parameter presence that works better with default XML schema.
+                var xmlContent = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<CaptureFingerPrintCond version=""2.0"" xmlns=""http://www.isapi.org/ver20/XMLSchema"">
+    <searchID>1</searchID>
+    <employeeNo>{memberId}</employeeNo>
+    <fingerNo>1</fingerNo>
+</CaptureFingerPrintCond>";
+
+                var response = await ExecuteWithRetryAsync(async (client) =>
+                {
+                    // Remove format=json to use XML
+                    var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/AccessControl/CaptureFingerPrint");
+                    // Important: Content-Type must be application/xml
+                    var content = new StringContent(xmlContent, Encoding.UTF8, "application/xml");
+                    request.Content = content;
+                    return await client.SendAsync(request);
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Capture initiated: {result}");
+                    return (true, "🔊 Device is now in ENROLLMENT MODE.\n\nPlease place user's finger on the sensor when the device prompts/beeps.");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    return (false, $"❌ Device Rejected Capture Command: {response.StatusCode}\n{error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                return (false, $"❌ Error initiating capture: {ex.Message}");
+            }
         }
 
         public async Task<(bool success, string message)> CompleteEnrollmentAsync(int memberId, string memberName)
         {
-            bool ok = await EnrollMemberAsync(memberId, memberName);
-            return (ok, ok ? "User created. Place finger on sensor." : "Failed to create user.");
+            // 1. Create/Ensure User Exists
+            try 
+            {
+                bool userCreated = await EnrollMemberAsync(memberId, memberName);
+                if (!userCreated) return (false, "Could not create user record on device.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Failed to create user: {ex.Message}");
+            }
+
+            // 2. Trigger Fingerprint Capture Mode
+            return await CaptureFingerPrintAsync(memberId);
         }
 
         public async Task<List<AcsEvent>?> GetRecentEventsAsync(DateTime startTime)
