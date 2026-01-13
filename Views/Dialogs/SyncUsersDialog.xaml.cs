@@ -41,8 +41,8 @@ namespace GymManagementSystem.Views.Dialogs
                             EmployeeNo = user.EmployeeNo ?? "N/A",
                             Name = user.Name ?? "Unknown",
                             UserType = user.UserType ?? "N/A",
-                            Valid = user.Valid ?? false,
-                            ValidDisplay = user.Valid == true ? "✓ Yes" : "✗ No"
+                            Valid = user.Valid?.Enable ?? false,
+                            ValidDisplay = user.Valid?.Enable == true ? "✓ Yes" : "✗ No"
                         };
 
                         // Try to match with member in database

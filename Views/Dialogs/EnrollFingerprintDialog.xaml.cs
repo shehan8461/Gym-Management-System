@@ -206,72 +206,51 @@ namespace GymManagementSystem.Views.Dialogs
                     // Small delay to ensure device is ready
                     await Task.Delay(1000);
 
-                    // Step 2: Start fingerprint capture
+                    // Small delay to ensure device is ready
+                    await Task.Delay(1000);
+
+                    // Step 2: Use CompleteEnrollmentAsync which handles Capture -> Save (via Re-creation)
                     txtStatus.Text = "Initiating fingerprint capture...";
-                    var captureResult = await _hikvisionService.CaptureFingerPrintAsync(memberId);
                     
-                    if (!captureResult.success)
+                    // Note: CompleteEnrollmentAsync now handles user creation/verification internally too
+                    // But we already created user above to ensure ID exists. That's fine.
+                    
+                    var enrollmentResult = await _hikvisionService.CompleteEnrollmentAsync(memberId, member.FullName);
+                    
+                    if (!enrollmentResult.success)
                     {
-                        txtStatus.Text = "Failed to initiate capture!";
+                        txtStatus.Text = "Enrollment Failed!";
                         txtStatus.Foreground = System.Windows.Media.Brushes.Red;
-                        MessageBox.Show(captureResult.message, "Device Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        await SaveEnrollmentHistory(memberId, _deviceId, false, "Capture Failed", captureResult.message);
+                        MessageBox.Show(enrollmentResult.message, "Device Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        await SaveEnrollmentHistory(memberId, _deviceId, false, "Capture Failed", enrollmentResult.message);
                         btnEnroll.IsEnabled = true;
                         btnClose.IsEnabled = true;
                         return;
                     }
 
+                    // Since CompleteEnrollmentAsync now waits for capture and saves it, 
+                    // we don't strictly need to poll if it returns success. 
+                    // However, we can still verify.
+                    
+                    txtStatus.Text = "✅ Fingerprint enrolled successfully!";
+                    txtStatus.Foreground = System.Windows.Media.Brushes.Green;
+                    MessageBox.Show(enrollmentResult.message, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await SaveEnrollmentHistory(memberId, _deviceId, true, "Success", "Fingerprint enrolled successfully on device.");
+                    
+                    // Wait a moment then close
+                    await Task.Delay(1000);
+                    DialogResult = true;
+                    Close();
+                    
+                    /* POLLING IS NO LONGER NEEDED IF WE USE THE SWAP METHOD */
+                    /*
                     // Step 3: Show instructions and start polling
                     txtStatus.Text = "Please place your finger on the sensor now...";
-                    txtStatus.Foreground = System.Windows.Media.Brushes.Blue;
+                    // ... polling logic ...
+                    */
+                    return;
                     
-                    // Start polling for enrollment completion
-                    _pollingCts = new CancellationTokenSource();
-                    bool enrollmentSuccess = await PollForEnrollmentCompletion(memberId, member.FullName, _pollingCts.Token);
-                    
-                    if (enrollmentSuccess)
-                    {
-                        txtStatus.Text = "✅ Fingerprint enrolled successfully!";
-                        txtStatus.Foreground = System.Windows.Media.Brushes.Green;
-                        MessageBox.Show($"Fingerprint enrolled successfully for {member.FullName}!\n\nThe member can now use fingerprint for attendance.", 
-                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                        await SaveEnrollmentHistory(memberId, _deviceId, true, "Success", "Fingerprint enrolled successfully on device.");
-                        
-                        // Wait a moment then close
-                        await Task.Delay(1000);
-                        DialogResult = true;
-                        Close();
-                    }
-                    else
-                    {
-                        txtStatus.Text = "⚠️ Remote enrollment not detected";
-                        txtStatus.Foreground = System.Windows.Media.Brushes.OrangeRed;
-                        
-                        var result = MessageBox.Show(
-                            "Remote fingerprint enrollment was not detected.\n\n" +
-                            "DS-K1T8003MF requires manual enrollment on the device:\n\n" +
-                            "📱 Steps:\n" +
-                            "   1. Go to the physical device\n" +
-                            "   2. Press MENU button\n" +
-                            "   3. User Management → Find user by ID\n" +
-                            "   4. Select Enroll Fingerprint\n" +
-                            "   5. Scan finger 3-5 times when prompted\n" +
-                            "   6. Device will show Success\n\n" +
-                            "Would you like to verify if fingerprint was enrolled manually?",
-                            "Manual Enrollment Required",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Information);
-                        
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            // Check if user enrolled manually
-                            await VerifyManualEnrollment(memberId, member.FullName);
-                        }
-                        else
-                        {
-                            await SaveEnrollmentHistory(memberId, _deviceId, false, "Enrollment Timeout", "Remote enrollment was not detected within timeout window.");
-                        }
-                    }
+
                 }
             }
             catch (Exception ex)
@@ -317,7 +296,7 @@ namespace GymManagementSystem.Views.Dialogs
                     if (currentUsers != null)
                     {
                         var enrolledUser = currentUsers.FirstOrDefault(u => 
-                            u.EmployeeNo == memberId.ToString() && u.Valid == true);
+                            u.EmployeeNo == memberId.ToString() && u.Valid?.Enable == true);
 
                         if (enrolledUser != null)
                         {

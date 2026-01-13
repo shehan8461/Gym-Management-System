@@ -1,0 +1,585 @@
+[1/13/2026 7:04:23 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:26 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:28 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:30 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:32 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:35 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:37 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:39 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:41 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:43 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:46 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:48 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:50 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:52 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:55 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:57 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:04:59 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:01 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:04 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:06 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:08 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:10 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:12 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:15 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:17 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:19 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:05:21 PM] Searching for Employee: 18
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:21 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:23 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:26 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:28 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:30 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:32 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:34 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:36 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:38 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:16:41 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:22:13 PM] Searching for Employee: 19
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:27 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:29 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:32 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:34 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:36 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:38 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:41 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:43 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:45 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:47 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:50 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:52 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:54 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:56 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:29:58 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:01 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:03 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:05 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:08 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:10 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:12 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:14 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:16 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:18 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:21 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:23 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------
+[1/13/2026 7:30:25 PM] Searching for Employee: 22
+FAILURE: NotFound - {
+	"statusCode":	4,
+	"statusString":	"Invalid Operation",
+	"subStatusCode":	"methodNotAllowed",
+	"errorCode":	1073741828,
+	"errorMsg":	"0x40000004"
+}
+-----------------------------------

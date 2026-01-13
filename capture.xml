@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CaptureFingerPrintCond version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+    <searchID>1</searchID>
+    <employeeNo>1</employeeNo>
+    <fingerNo>1</fingerNo>
+    <sessionID>SessionTest123</sessionID>
+    <fingerPrintType>normalFP</fingerPrintType>
+    <overWrite>true</overWrite>
+</CaptureFingerPrintCond>

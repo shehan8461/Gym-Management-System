@@ -1,0 +1,27 @@
+{
+    "UserInfo": {
+        "employeeNo": "9999",
+        "name": "TestFPUser",
+        "userType": "normal",
+        "closeDelayEnabled": false,
+        "Valid": {
+            "enable": true,
+            "beginTime": "2026-01-01T00:00:00",
+            "endTime": "2036-01-01T00:00:00",
+            "timeType": "local"
+        },
+        "doorRight": "1",
+        "RightPlan": [
+            {
+                "doorNo": 1,
+                "planTemplateNo": "1"
+            }
+        ],
+        "FingerPrintIDList": [
+            {
+                "fingerNo": 1,
+                "fingerData": "MzAxGzrFJXiAA3GNFkh0G4E5FgiFeJMxJviNeqW5FZh0xj8pFnh0e6OBJniMjF2pJbiEYmdFJahwU37NFUiJVqw1FqiOJbg9FjidJq55JVh8Q6k5FriOH92JJcikJ2JhJah4Zor5JfiJCpxlJxiAm6UxJviDTOmJF7igmuR9JFiwwOyVFIigPl7JJFiQVtEFJEiQr+opFJioNvh9FUh4MfQ9JkiYHQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPhMAJmkRRCEExo4YElPgEAqwOhIQhglW1mkBYK4DersoMyOdDEPJSiGQiRJM9yYD5J4NH9kEAEK4AnhZVTAA4QaM2B0Bkr4IU3BkBjRUARscIjBkrQ4nTCRtIZ0WVu4BwELuBXtucBBGBAADNTIz5XkaHXURBNPNGTGPDXYk3RGbq1xXYIEUwAAAAAAAP3I="
+            }
+        ]
+    }
+}

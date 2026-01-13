@@ -1,0 +1,219 @@
+{
+	"UserInfoSearch":	{
+		"searchID":	"1",
+		"responseStatusStrg":	"MORE",
+		"numOfMatches":	10,
+		"totalMatches":	36,
+		"UserInfo":	[{
+				"employeeNo":	"00000005",
+				"name":	"she1",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-12T00:00:00",
+					"endTime":	"2036-01-11T23:59:59"
+				},
+				"password":	"",
+				"doorRight":	"1",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	"1"
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"2",
+				"name":	"J",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"UTC",
+					"beginTime":	"1970-01-01T05:30:00+05:30",
+					"endTime":	"2037-12-31T23:59:59+05:30"
+				},
+				"password":	"",
+				"doorRight":	"1",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	"1"
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"7",
+				"name":	"fdsf",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T17:46:55",
+					"endTime":	"2036-01-13T17:46:55"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"6",
+				"name":	"dsd",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T17:51:52",
+					"endTime":	"2036-01-13T17:51:52"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"5",
+				"name":	"fdfdf",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T17:56:20",
+					"endTime":	"2036-01-13T17:56:20"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"4",
+				"name":	"shehan",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T18:00:08",
+					"endTime":	"2036-01-13T18:00:08"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"3",
+				"name":	"test3",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T18:00:47",
+					"endTime":	"2036-01-13T18:00:47"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"1",
+				"name":	"test",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T18:05:15",
+					"endTime":	"2036-01-13T18:05:15"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"8",
+				"name":	"shehantest",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T18:08:18",
+					"endTime":	"2036-01-13T18:08:18"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}, {
+				"employeeNo":	"9999",
+				"name":	"Test User",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-13T18:08:49",
+					"endTime":	"2036-01-13T18:08:49"
+				},
+				"password":	"",
+				"doorRight":	"",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	""
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}]
+	}
+}
