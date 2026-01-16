@@ -414,48 +414,34 @@ namespace GymManagementSystem.Services
                          // I will duplicate the Enroll logic locally here to be STRICT?
                          // No, that's messy.
                          
-                         // let's try to proceed. 
-                         bool finalSuccess = await EnrollMemberAsync(memberId, memberName, cleanFp);
+                        // Updated CompleteEnrollmentAsync Logic:
+                        // 1. Create User (JSON) - Simple
+                        // 2. Set Fingerprint (XML) - Robust
+                        
+                        // We do NOT assume EnrollMemberAsync handles FP anymore for this flow.
+                         bool finalSuccess = await EnrollMemberAsync(memberId, memberName); // Plain user creation
                          if (finalSuccess)
                          {
-                             // If it says success, we hope it created a new user.
-                             Debug.WriteLine("[CompleteEnrollment] ✅ SUCCESS: User re-created.");
-                             return (true, "Fingerprint Captured and Saved Successfully.");
+                             // Now explicitly SET the fingerprint using XML
+                             Debug.WriteLine($"[CompleteEnrollment] User created/exists. Now setting fingerprint via XML...");
+                             bool fpSet = await SetFingerPrintAsync(memberId, cleanFp);
+                             
+                             if (fpSet)
+                             {
+                                 Debug.WriteLine("[CompleteEnrollment] ✅ SUCCESS: User created and Fingerprint set.");
+                                 return (true, "Fingerprint Captured and Saved Successfully.");
+                             }
+                             else
+                             {
+                                 Debug.WriteLine("[CompleteEnrollment] ⚠️ User created but Fingerprint SET failed.");
+                                 return (true, "User created, but Fingerprint upload failed. Check device logs.");
+                             }
                          }
                      }
                      catch (Exception ex)
                      {
                          Debug.WriteLine($"[CompleteEnrollment] Creation failed: {ex.Message}");
-                         
-                         // Check for "Already Exists" exception (if EnrollMemberAsync wasn't fully patched or throws differently)
-                         // OR if we manually decide to throw.
-                         
-                         // Since I just patched EnrollMemberAsync to NOT throw on exist, 
-                         // this catch block might not be hit for "Already Exists".
-                         // This is a dilemma.
-                         
-                         // BUT wait, in the screenshot, it threw. 
-                         // If I applied the patch in previous step, it WON'T throw.
-                         // If it doesn't throw, we return "Success". 
-                         // But the user has NO fingerprint on device (Zombie user).
-                         
-                         // I should revert the "swallow error" fix in EnrollMemberAsync?
-                         // Or make it optional?
-                         // Let's make EnrollMemberAsync throw on conflict? 
-                         // No, other parts of app depend on it.
-                         
-                         // SOLUTION: Explicit "Delete" check inside loop here.
-                         // If creation fails (or we suspect zombie), delete again.
                      }
-                     
-                     // If we are here, we might want to retry if we suspect failure.
-                     // But if EnrollMemberAsync returns true, we exit loop.
-                     // The only way to know if we failed is if we catch an exception.
-                     // If I fixed the exception swallowing, I CANNOT Detect failure easily.
-                     
-                     // Actually, if we use a different method...
-                     // Let's Try Delete one more time just in case, if we cycle?
-                     // No.
                  }
                  
                  // Fallback
@@ -470,27 +456,159 @@ namespace GymManagementSystem.Services
         }
 
         /// <summary>
-        /// Delete a member's fingerprint/user
+        /// Explicitly set fingerprint using XML (Device preferred method)
         /// </summary>
-        public async Task<bool> DeleteMemberAsync(int memberId)
+        public async Task<bool> SetFingerPrintAsync(int memberId, string fingerData)
         {
             try
             {
                 EnsureHttpClientConfigured();
+
+                var xmlContent = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<FingerPrintCfg version=""2.0"" xmlns=""http://www.isapi.org/ver20/XMLSchema"">
+    <FingerPrintIDList>
+        <FingerPrintID>
+            <employeeNo>{memberId}</employeeNo>
+            <cardReaderNo>1</cardReaderNo>
+            <fingerPrintID>1</fingerPrintID>
+            <fingerType>normalFP</fingerType>
+            <fingerData>{fingerData}</fingerData>
+        </FingerPrintID>
+    </FingerPrintIDList>
+</FingerPrintCfg>";
+
+                // Try PUT /ISAPI/AccessControl/FingerPrint/SetUp (Standard)
+                // If 404/405, we might need different endpoint.
+                // Note: Some models use POST.
+                
+                var response = await ExecuteWithRetryAsync(async (client) =>
+                {
+                    // Using PUT
+                    var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/AccessControl/FingerPrint/SetUp");
+                    var content = new StringContent(xmlContent, Encoding.UTF8, "application/xml");
+                    request.Content = content;
+                    return await client.SendAsync(request);
+                });
+
+                if (response.IsSuccessStatusCode) return true;
+                
+                Debug.WriteLine($"[SetFingerPrint] PUT failed: {response.StatusCode}. Retrying with POST...");
+                
+                // Retry with POST if PUT fails
+                var responsePost = await ExecuteWithRetryAsync(async (client) =>
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/AccessControl/FingerPrint/SetUp");
+                    var content = new StringContent(xmlContent, Encoding.UTF8, "application/xml");
+                    request.Content = content;
+                    return await client.SendAsync(request);
+                });
+                
+                return responsePost.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Set fingerprint error: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Delete a member's fingerprint/user
+        /// </summary>
+        /// <summary>
+        /// Delete a member's fingerprint/user
+        /// </summary>
+        public async Task<bool> DeleteMemberAsync(int memberId)
+        {
+            EnsureHttpClientConfigured();
+            
+            // Strategy 1: HTTP DELETE (Standard ISAPI)
+            try
+            {
                 var response = await ExecuteWithRetryAsync(async (client) => 
                 {
-                    // Explicitly enforce JSON to avoid XML response causing JsonReaderException
                     var request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/AccessControl/UserInfo/Delete?format=json&employeeNo={memberId}");
                     request.Headers.TryAddWithoutValidation("Accept", "application/json");
                     return await client.SendAsync(request);
                 });
-                return response.IsSuccessStatusCode;
+
+                if (response.IsSuccessStatusCode) return true;
+                
+                Debug.WriteLine($"[DeleteMember] strategy 1 (DELETE) failed: {response.StatusCode}. Trying Strategy 2...");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Delete member error: {ex.Message}");
-                return false;
+                Debug.WriteLine($"[DeleteMember] strategy 1 (DELETE) exception: {ex.Message}");
             }
+
+            // Strategy 2: PUT /UserInfo/Delete (JSON Payload) - Common on newer firmware
+            try
+            {
+                var payload = new
+                {
+                    UserInfoDetail = new
+                    {
+                        mode = "byEmployeeNo",
+                        EmployeeNoList = new[]
+                        {
+                            new { employeeNo = memberId.ToString() }
+                        }
+                    }
+                };
+                var json = JsonConvert.SerializeObject(payload);
+
+                var response = await ExecuteWithRetryAsync(async (client) =>
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/AccessControl/UserInfo/Delete?format=json");
+                    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                    return await client.SendAsync(request);
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                     Debug.WriteLine($"[DeleteMember] strategy 2 (PUT Delete) Success.");
+                     return true;
+                }
+                
+                Debug.WriteLine($"[DeleteMember] strategy 2 (PUT Delete) failed: {response.StatusCode}. Trying Strategy 3...");
+            }
+            catch (Exception ex)
+            {
+                 Debug.WriteLine($"[DeleteMember] strategy 2 (PUT Delete) exception: {ex.Message}");
+            }
+
+            // Strategy 3: PUT /UserInfo/Modify (Soft Delete / Disable) - User verified this works
+            try
+            {
+                var modifyPayload = new
+                {
+                   UserInfo = new
+                   {
+                       employeeNo = memberId.ToString(),
+                       Valid = new { enable = false }
+                   }
+                };
+                var json = JsonConvert.SerializeObject(modifyPayload);
+
+                var response = await ExecuteWithRetryAsync(async (client) =>
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Put, $"{_baseUrl}/AccessControl/UserInfo/Modify?format=json");
+                    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                    return await client.SendAsync(request);
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                     Debug.WriteLine($"[DeleteMember] strategy 3 (Disable/Modify) Success.");
+                     return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                 Debug.WriteLine($"[DeleteMember] strategy 3 (Modify/Disable) exception: {ex.Message}");
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -797,6 +915,85 @@ namespace GymManagementSystem.Services
                 }
                 return null;
             } catch { return null; }
+        }
+
+        /// <summary>
+        /// Fetch attendance logs with specific Major/Minor types (Major 5=Event, Minor 0=Access Granted typically)
+        /// </summary>
+        public async Task<List<AcsEvent>?> GetAttendanceLogsAsync(DateTime startTime, DateTime endTime)
+        {
+            try 
+            {
+                EnsureHttpClientConfigured();
+                
+                // User provided payload structure:
+                // { "AcsEventCond": { ... } }
+                
+                var searchPayload = new 
+                {
+                    AcsEventCond = new 
+                    {
+                        searchID = "get_attendance_list",
+                        searchResultPosition = 0,
+                        maxResults = 50,
+                        major = 5,
+                        minor = 0,
+                        startTime = startTime.ToString("yyyy-MM-ddTHH:mm:ss+05:30"), 
+                        endTime = endTime.ToString("yyyy-MM-ddTHH:mm:ss+05:30")
+                    }
+                };
+                
+                var json = JsonConvert.SerializeObject(searchPayload);
+                Debug.WriteLine($"[GetAttendanceLogs] Payload: {json}");
+
+                var response = await ExecuteWithRetryAsync(async (client) => 
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Post, $"{_baseUrl}/AccessControl/AcsEvent?format=json");
+                    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                    return await client.SendAsync(request);
+                });
+
+                if (response.IsSuccessStatusCode) 
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    try 
+                    {
+                        // Use JObject for dynamic parsing since device response structure varies
+                        var root = Newtonsoft.Json.Linq.JObject.Parse(content);
+                        
+                        // Check for "AcsEvent" or "AcsEventSearchResult"
+                        var validRoot = root["AcsEvent"] ?? root["AcsEventSearchResult"] ?? root["AcsEventSearch"];
+                        
+                        if (validRoot != null)
+                        {
+                            // Try to find the list property: "InfoList" or "AcsEventTable" or "AcsEvent"
+                            var listToken = validRoot["InfoList"] ?? validRoot["AcsEventTable"] ?? validRoot["AcsEvent"];
+                            
+                            if (listToken != null)
+                            {
+                                return listToken.ToObject<List<AcsEvent>>();
+                            }
+                        }
+                        
+                        Debug.WriteLine("[GetAttendanceLogs] Could not find event list in JSON response.");
+                        Debug.WriteLine($"Response Snippet: {content.Substring(0, Math.Min(content.Length, 200))}");
+                    }
+                    catch (Exception ex)
+                    {
+                         Debug.WriteLine($"[GetAttendanceLogs] Parse Error: {ex.Message}");
+                    }
+                    return new List<AcsEvent>();
+                }
+                else
+                {
+                    Debug.WriteLine($"[GetAttendanceLogs] Failed: {response.StatusCode}");
+                }
+            } 
+            catch (Exception ex) 
+            {
+                Debug.WriteLine($"Error fetching attendance logs: {ex.Message}");
+            }
+            return new List<AcsEvent>();
         }
 
         public void Dispose()

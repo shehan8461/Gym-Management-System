@@ -1,0 +1,6 @@
+<FingerPrintCond version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+    <searchID>1</searchID>
+    <employeeNo>44</employeeNo>
+    <cardReaderNo>1</cardReaderNo>
+    <fingerPrintID>0</fingerPrintID>
+</FingerPrintCond>

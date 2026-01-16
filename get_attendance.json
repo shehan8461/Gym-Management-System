@@ -1,0 +1,11 @@
+{
+    "AcsEventCond": {
+        "searchID": "test_curl_1",
+        "searchResultPosition": 0,
+        "maxResults": 50,
+        "major": 5,
+        "minor": 0,
+        "startTime": "2026-01-15T00:00:00+05:30",
+        "endTime": "2026-01-15T23:59:59+05:30"
+    }
+}

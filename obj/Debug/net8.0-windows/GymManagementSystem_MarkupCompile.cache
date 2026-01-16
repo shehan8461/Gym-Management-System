@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\Shehan\Desktop\Gym-Management-System\App.xaml
-21-814364378
+23-2140095914
 
-36-330286594
+38-731765220
 217728001
-Views\Dialogs\AddEditDeviceDialog.xaml;Views\Dialogs\AddEditMemberDialog.xaml;Views\Dialogs\AddEditPackageDialog.xaml;Views\Dialogs\AddPaymentDialog.xaml;Views\Dialogs\AddUserDialog.xaml;Views\Dialogs\AssignPackageDialog.xaml;Views\Dialogs\EnrollFingerprintDialog.xaml;Views\Dialogs\MarkAttendanceDialog.xaml;Views\Dialogs\MemberAttendanceHistoryDialog.xaml;Views\Dialogs\MemberHistoryDialog.xaml;Views\Dialogs\PackageMembersDialog.xaml;Views\Dialogs\SyncUsersDialog.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\Pages\AttendancePage.xaml;Views\Pages\BiometricPage.xaml;Views\Pages\DashboardPage.xaml;Views\Pages\MembersPage.xaml;Views\Pages\PackagesPage.xaml;Views\Pages\PaymentsPage.xaml;Views\Pages\UsersPage.xaml;
+Views\Dialogs\AddEditDeviceDialog.xaml;Views\Dialogs\AddEditMemberDialog.xaml;Views\Dialogs\AddEditPackageDialog.xaml;Views\Dialogs\AddPaymentDialog.xaml;Views\Dialogs\AddUserDialog.xaml;Views\Dialogs\AssignPackageDialog.xaml;Views\Dialogs\EnrollFingerprintDialog.xaml;Views\Dialogs\MarkAttendanceDialog.xaml;Views\Dialogs\MemberActionsDialog.xaml;Views\Dialogs\MemberAttendanceHistoryDialog.xaml;Views\Dialogs\MemberHistoryDialog.xaml;Views\Dialogs\PackageMembersDialog.xaml;Views\Dialogs\SyncUsersDialog.xaml;Views\LoginWindow.xaml;Views\MainWindow.xaml;Views\Pages\AttendancePage.xaml;Views\Pages\BiometricPage.xaml;Views\Pages\DashboardPage.xaml;Views\Pages\MembersPage.xaml;Views\Pages\MemberStatusPage.xaml;Views\Pages\PackagesPage.xaml;Views\Pages\PaymentsPage.xaml;Views\Pages\UsersPage.xaml;
 
 False
 

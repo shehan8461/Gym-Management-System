@@ -1,173 +1,172 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using GymManagementSystem.Services;
 using GymManagementSystem.Data;
-using GymManagementSystem.Views.Dialogs;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace GymManagementSystem.Views.Pages
 {
     public partial class AttendancePage : Page
     {
+        private HikvisionService _hikvisionService;
+
         public AttendancePage()
         {
             InitializeComponent();
-            dpFilterDate.SelectedDate = DateTime.Now.Date;
-            LoadAttendance();
-            LoadStatistics();
+            _hikvisionService = new HikvisionService();
+            
+            // Default Date Range: Today
+            dpStartDate.SelectedDate = DateTime.Today;
+            dpEndDate.SelectedDate = DateTime.Today;
         }
 
-        private System.Threading.CancellationTokenSource _searchCts;
-        private System.Threading.CancellationTokenSource _loadCts;
-
-        private async void LoadAttendance(string searchTerm = "", DateTime? filterDate = null)
+        private async void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            _loadCts?.Cancel();
-            _loadCts = new System.Threading.CancellationTokenSource();
-            var token = _loadCts.Token;
+            if (dpStartDate.SelectedDate == null || dpEndDate.SelectedDate == null)
+            {
+                MessageBox.Show("Please select both Start and End dates.", "Selection Missing", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            DateTime start = dpStartDate.SelectedDate.Value;
+            DateTime end = dpEndDate.SelectedDate.Value.AddDays(1).AddSeconds(-1); // End of day
+
+            if (end < start)
+            {
+                MessageBox.Show("End date cannot be before Start date.", "Invalid Range", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // UI Loading State
+            btnLoad.IsEnabled = false;
+            progressBar.Visibility = Visibility.Visible;
+            dgAttendance.ItemsSource = null;
+            txtStatus.Text = "Connecting to device and fetching logs...";
 
             try
             {
-                var result = await Task.Run(async () =>
+                // 1. Get Connection Config from DB
+                Models.BiometricDevice? device = null;
+                using (var context = new GymDbContext())
                 {
-                    if (token.IsCancellationRequested) return null;
+                    device = await context.BiometricDevices.FirstOrDefaultAsync();
+                }
 
-                    using (var context = new GymDbContext())
+                if (device == null)
+                {
+                    MessageBox.Show("No biometric device configured.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ResetUI();
+                    return;
+                }
+
+                // 2. Connect
+                if (!_hikvisionService.IsConnected)
+                {
+                    var connected = await _hikvisionService.ConnectAsync(device.IPAddress, device.Port, device.Username, device.Password);
+                    if (!connected.success)
                     {
-                        var query = context.Attendances
-                            .Include(a => a.Member)
-                            .AsQueryable();
-
-                        // Date filter
-                        if (filterDate.HasValue)
-                        {
-                            var utcDate = DateTime.SpecifyKind(filterDate.Value.Date, DateTimeKind.Utc);
-                            query = query.Where(a => a.CheckInDate.Date == utcDate);
-                        }
-
-                        // Search filter
-                        if (!string.IsNullOrEmpty(searchTerm))
-                        {
-                            var lowerTerm = searchTerm.ToLower();
-                            query = query.Where(a => a.Member.FullName.ToLower().Contains(lowerTerm));
-                        }
-
-                        var attendances = await query
-                            .OrderByDescending(a => a.CheckInDate)
-                            .ThenByDescending(a => a.CheckInTime)
-                            .AsNoTracking()
-                            .ToListAsync(token);
-
-                        if (token.IsCancellationRequested) return null;
-
-                        var projected = attendances.Select(a => new
-                        {
-                            a.AttendanceId,
-                            a.MemberId,
-                            MemberName = a.Member.FullName,
-                            a.CheckInDate,
-                            CheckInTimeDisplay = a.CheckInTime.ToString(@"hh\:mm\:ss"),
-                            CheckOutTimeDisplay = a.CheckOutTime.HasValue ? a.CheckOutTime.Value.ToString(@"hh\:mm\:ss") : "-",
-                            a.AttendanceType,
-                            a.Remarks
-                        }).ToList();
-
-                        return projected;
+                        MessageBox.Show($"Connection failed: {connected.message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        ResetUI();
+                        return;
                     }
-                }, token);
+                }
 
-                if (token.IsCancellationRequested || result == null) return;
+                // 3. Fetch Logs
+                var logs = await _hikvisionService.GetAttendanceLogsAsync(start, end);
 
-                dgAttendance.ItemsSource = result;
-                
-                // Reload stats if date changes or first load
-                LoadStatistics(filterDate);
-            }
-            catch (TaskCanceledException)
-            {
-                // Ignore
+                if (logs == null || !logs.Any())
+                {
+                    txtStatus.Text = "No records found for the selected period.";
+                    ResetUI();
+                    return;
+                }
+
+                // 4. Map Member Names from DB
+                var mappedLogs = await MapMemberNames(logs);
+
+                dgAttendance.ItemsSource = mappedLogs;
+                txtStatus.Text = $"Loaded {mappedLogs.Count} records.";
             }
             catch (Exception ex)
             {
-                // Ignore Oracle cancellation
-                if (ex.Message.Contains("ORA-01013")) return;
-
-                MessageBox.Show($"Error loading attendance: {ex.Message}", 
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtStatus.Text = "Error occurred.";
+            }
+            finally
+            {
+                ResetUI();
             }
         }
 
-        private async void LoadStatistics(DateTime? filterDate = null)
+        private async Task<List<AttendanceViewModel>> MapMemberNames(List<AcsEvent> logs)
         {
-            try
+            using (var context = new GymDbContext())
             {
-                var targetDate = filterDate ?? DateTime.Now.Date;
-                var utcTargetDate = DateTime.SpecifyKind(targetDate, DateTimeKind.Utc);
+                // Get all active member IDs/Names for fast lookup
+                var members = await context.Members
+                    .Select(m => new { m.MemberId, m.FullName })
+                    .ToListAsync();
+                
+                var memberDict = members.ToDictionary(m => m.MemberId.ToString(), m => m.FullName);
 
-                var stats = await Task.Run(() =>
+                var viewModels = new List<AttendanceViewModel>();
+
+                foreach (var log in logs)
                 {
-                    using (var context = new GymDbContext())
+                    string empNo = log.employeeNoString ?? ""; // employeeNoString is the field in AcsEvent
+                    // Note: AcsEvent def: public string? employeeNoString { get; set; }
+                    // It does NOT have 'employeeNo' field according to line 923.
+                    // Wait, let's check AcsEvent definition again.
+                    // Line 923: public string? employeeNoString { get; set; }
+                    // Line 922: public string? time { get; set; }
+                    // Line 920: public int major { get; set; }
+                    
+                    // So 'log.employeeNo' in my previous code might be wrong if it doesn't exist.
+                    // I should check if I need to add 'employeeNo' to AcsEvent or just use 'employeeNoString'.
+                    // User's JSON usually returns 'employeeNoString' for events.
+                    
+                    string name = "Unknown / Guest";
+
+                    if (!string.IsNullOrEmpty(empNo) && memberDict.TryGetValue(empNo, out string? dbName))
                     {
-                        var todayCount = context.Attendances
-                            .Count(a => a.CheckInDate.Date == utcTargetDate);
-                        
-                        // Active = Checked in today but NOT checked out
-                        var activeCount = context.Attendances
-                            .Count(a => a.CheckInDate.Date == utcTargetDate && a.CheckOutTime == null);
-
-                        return new { todayCount, activeCount };
+                        name = dbName;
                     }
-                });
+                    else if (!string.IsNullOrEmpty(log.name))
+                    {
+                        name = log.name; 
+                    }
 
-                txtPresentCount.Text = stats.todayCount.ToString();
-                txtActiveCount.Text = stats.activeCount.ToString();
+                    viewModels.Add(new AttendanceViewModel
+                    {
+                        DateTimeString = log.GetDateTime().ToString("yyyy-MM-dd hh:mm:ss tt"),
+                        MemberName = name,
+                        EmployeeNo = empNo,
+                        EventType = log.major == 5 && log.minor == 0 ? "Access Granted" : $"Event {log.major}-{log.minor}"
+                    });
+                }
+                
+                // Sort by latest first
+                return viewModels.OrderByDescending(x => x.DateTimeString).ToList();
             }
-            catch (Exception)
-            {
-                // Fail silently
-            }
         }
 
-        private void btnMarkAttendance_Click(object sender, RoutedEventArgs e)
+        private void ResetUI()
         {
-            var dialog = new MarkAttendanceDialog();
-            if (dialog.ShowDialog() == true)
-            {
-                LoadAttendance(txtSearch.Text.Trim(), dpFilterDate.SelectedDate);
-            }
+            btnLoad.IsEnabled = true;
+            progressBar.Visibility = Visibility.Collapsed;
         }
+    }
 
-        private async void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            _searchCts?.Cancel();
-            _searchCts = new System.Threading.CancellationTokenSource();
-            var token = _searchCts.Token;
-
-            try
-            {
-                await Task.Delay(300, token);
-                LoadAttendance(txtSearch.Text.Trim(), dpFilterDate.SelectedDate);
-            }
-            catch (TaskCanceledException) { }
-        }
-
-        private void dpFilterDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            LoadAttendance(txtSearch.Text.Trim(), dpFilterDate.SelectedDate);
-        }
-
-        private void btnToday_Click(object sender, RoutedEventArgs e)
-        {
-            dpFilterDate.SelectedDate = DateTime.Now.Date;
-        }
-
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            txtSearch.Text = "";
-            dpFilterDate.SelectedDate = DateTime.Now.Date;
-            LoadAttendance();
-        }
+    public class AttendanceViewModel
+    {
+        public string DateTimeString { get; set; } = string.Empty;
+        public string MemberName { get; set; } = string.Empty;
+        public string EmployeeNo { get; set; } = string.Empty;
+        public string EventType { get; set; } = string.Empty;
+        public string EventTypeString => EventType; // Binding alias
     }
 }

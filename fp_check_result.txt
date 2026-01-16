@@ -1,0 +1,30 @@
+{
+	"UserInfoSearch":	{
+		"searchID":	"1",
+		"responseStatusStrg":	"OK",
+		"numOfMatches":	1,
+		"totalMatches":	1,
+		"UserInfo":	[{
+				"employeeNo":	"9998",
+				"name":	"TestFPUser",
+				"userType":	"normal",
+				"closeDelayEnabled":	false,
+				"Valid":	{
+					"enable":	true,
+					"timeType":	"local",
+					"beginTime":	"2026-01-01T00:00:00",
+					"endTime":	"2036-01-01T00:00:00"
+				},
+				"password":	"",
+				"doorRight":	"1",
+				"RightPlan":	[{
+						"doorNo":	1,
+						"planTemplateNo":	"1"
+					}],
+				"maxOpenDoorTime":	0,
+				"openDoorTime":	0,
+				"localUIRight":	false,
+				"userVerifyMode":	""
+			}]
+	}
+}

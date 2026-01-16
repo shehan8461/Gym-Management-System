@@ -51,6 +51,11 @@ namespace GymManagementSystem.Views
             MainFrame.Navigate(new MembersPage());
         }
 
+        private void btnMemberStatus_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new MemberStatusPage());
+        }
+
         private void btnPayments_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new PaymentsPage());

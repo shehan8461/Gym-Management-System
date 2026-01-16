@@ -470,12 +470,39 @@ namespace GymManagementSystem.Views.Pages
             }
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private async void btnActions_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            if (button?.Tag is not int memberId)
-                return;
+            if (button?.Tag is int memberId)
+            {
+                var dialog = new MemberActionsDialog(memberId);
+                var result = dialog.ShowDialog();
+                
+                // If delete was clicked in the dialog
+                if (result == true && dialog.ActionTaken)
+                {
+                    await HandleDeleteMember(memberId);
+                }
+                else if (dialog.ActionTaken)
+                {
+                    // Refresh the grid if any other action was taken
+                    LoadMembers(txtSearch.Text.Trim());
+                }
+            }
+        }
 
+
+        private async void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button?.Tag is int memberId)
+            {
+                await HandleDeleteMember(memberId);
+            }
+        }
+
+        private async Task HandleDeleteMember(int memberId)
+        {
             try
             {
                 using (var context = new GymDbContext())
@@ -503,6 +530,51 @@ namespace GymManagementSystem.Views.Pages
                     if (result != MessageBoxResult.Yes)
                         return;
 
+                    // ---------------------------------------------------------
+                    // 1. Attempt to delete from Hikvision Device first
+                    // ---------------------------------------------------------
+                    bool deviceDeleteSuccess = false;
+                    string deviceMessage = "";
+
+                    // Find connected device credentials
+                    var device = context.BiometricDevices.FirstOrDefault(d => d.IsConnected);
+                    if (device != null)
+                    {
+                        try
+                        {
+                            using (var service = new HikvisionService())
+                            {
+                                var connectResult = await service.ConnectAsync(device.IPAddress, device.Port, device.Username, device.Password);
+                                if (connectResult.success)
+                                {
+                                    // Try HARD DELETE first (frees up space)
+                                    deviceDeleteSuccess = await service.DeleteMemberAsync(memberId);
+                                    if (deviceDeleteSuccess)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"[Delete] Member {memberId} deleted from device.");
+                                    }
+                                    else
+                                    {
+                                        deviceMessage = "Could not remove user from device (Check connection or if user exists).";
+                                        System.Diagnostics.Debug.WriteLine($"[Delete] Device delete failed for {memberId}.");
+                                    }
+                                }
+                                else
+                                {
+                                    deviceMessage = "Could not connect to device.";
+                                }
+                            }
+                        }
+                        catch (Exception devEx)
+                        {
+                            deviceMessage = $"Device error: {devEx.Message}";
+                            System.Diagnostics.Debug.WriteLine($"[Delete] Device exception: {devEx.Message}");
+                        }
+                    }
+
+                    // ---------------------------------------------------------
+                    // 2. Delete from Local Database
+                    // ---------------------------------------------------------
                     using (var tx = context.Database.BeginTransaction())
                     {
                         var payments = context.Payments.AsTracking().Where(p => p.MemberId == memberId).ToList();
@@ -512,6 +584,11 @@ namespace GymManagementSystem.Views.Pages
                         var attendances = context.Attendances.AsTracking().Where(a => a.MemberId == memberId).ToList();
                         if (attendances.Count > 0)
                             context.Attendances.RemoveRange(attendances);
+                        
+                        // Also remove fingerprint history
+                        var fpHistory = context.FingerprintEnrollmentHistories.AsTracking().Where(f => f.MemberId == memberId).ToList();
+                        if (fpHistory.Count > 0)
+                            context.FingerprintEnrollmentHistories.RemoveRange(fpHistory);
 
                         var trackedMember = context.Members.AsTracking().FirstOrDefault(m => m.MemberId == memberId);
                         if (trackedMember != null)
@@ -520,10 +597,24 @@ namespace GymManagementSystem.Views.Pages
                         context.SaveChanges();
                         tx.Commit();
                     }
-                }
 
-                MessageBox.Show("Member deleted successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                LoadMembers(txtSearch.Text.Trim());
+                    // ---------------------------------------------------------
+                    // 3. Feedback
+                    // ---------------------------------------------------------
+                    string msg = "Member deleted successfully from database.";
+                    if (device != null)
+                    {
+                        if (deviceDeleteSuccess)
+                            msg += "\n\n✅ Also removed from Hikvision device.";
+                        else
+                            msg += $"\n\n⚠️ Warning: {deviceMessage}\n(User might still be on the device)";
+                    }
+
+                    MessageBox.Show(msg, "Deletion Result", MessageBoxButton.OK, 
+                        deviceDeleteSuccess ? MessageBoxImage.Information : MessageBoxImage.Warning);
+
+                    LoadMembers(txtSearch.Text.Trim());
+                }
             }
             catch (Exception ex)
             {

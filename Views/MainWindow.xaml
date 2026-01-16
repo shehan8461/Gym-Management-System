@@ -153,6 +153,18 @@
                             </StackPanel>
                         </Button>
 
+                         <!-- Member Status (NEW)
+                        <Button x:Name="btnMemberStatus" 
+                                Style="{StaticResource MenuButtonStyle}"
+                                Click="btnMemberStatus_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#FF9800" CornerRadius="8" Padding="8" Margin="0,0,16,0">
+                                    <materialDesign:PackIcon Kind="CardAccountDetails" Width="24" Height="24" Foreground="White"/>
+                                </Border>
+                                <TextBlock Text="Member Status" VerticalAlignment="Center" FontSize="15"/>
+                            </StackPanel>
+                        </Button> -->
+
                         <!-- Payments -->
                         <Button x:Name="btnPayments" 
                                 Style="{StaticResource MenuButtonStyle}"
@@ -200,7 +212,7 @@
                                 <Border Background="#E91E63" CornerRadius="8" Padding="8" Margin="0,0,16,0">
                                     <materialDesign:PackIcon Kind="Fingerprint" Width="24" Height="24" Foreground="White"/>
                                 </Border>
-                                <TextBlock Text="Biometric Management" VerticalAlignment="Center" FontSize="15"/>
+                                <TextBlock Text="Biometric" VerticalAlignment="Center" FontSize="15"/>
                             </StackPanel>
                         </Button>
 
