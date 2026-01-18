@@ -212,7 +212,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="ACTIONS" Width="120">
+                    <DataGridTemplateColumn Header="ACTIONS" Width="180">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -229,6 +229,13 @@
                                             Click="btnViewMembers_Click"
                                             Height="32" Width="32">
                                         <materialDesign:PackIcon Kind="AccountDetails" Foreground="#1976d2"/>
+                                    </Button>
+                                    <Button Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="Delete Package"
+                                            Tag="{Binding PackageId}"
+                                            Click="btnDelete_Click"
+                                            Height="32" Width="32">
+                                        <materialDesign:PackIcon Kind="Delete" Foreground="#F44336"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
